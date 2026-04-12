@@ -12,6 +12,12 @@ Polynomial<T>::Polynomial() {
 }
 
 template <class T>
+Polynomial<T>::Polynomial(T item) {
+    coefficients = new MutableArraySequence<T>();
+    coefficients->append(item);
+}
+
+template <class T>
 Polynomial<T>::Polynomial(Sequence<T> *coeffs) : coefficients(coeffs) {
     Normalize();
 }
@@ -101,6 +107,15 @@ Polynomial<T> Polynomial<T>::operator*(const Polynomial<T> &other) const {
 }
 
 template <class T>
+Polynomial<T> Polynomial<T>::operator*(const T &scalar) const {
+    Polynomial<T> new_polynomial(coefficients->copy());
+    for (int i = 0; i < coefficients->getLength(); i++) {
+        new_polynomial.coefficients->set(coefficients->get(i) * scalar, i);
+    }
+    return new_polynomial;
+}
+
+template <class T>
 int Polynomial<T>::Degree() const {
     return coefficients->getLength();
 }
@@ -120,6 +135,20 @@ T Polynomial<T>::Evaluate(const T &x) const {
         evaluate = evaluate * x + GetCoefficient(i);
     }
     return evaluate;
+}
+
+template <class T>
+Polynomial<T> Polynomial<T>::Compose(const Polynomial<T> &other) const {
+    Polynomial<T> new_polynomial;
+    for (int i = Degree() - 1; i >= 0; i--) {
+        new_polynomial = new_polynomial * other + Polynomial(GetCoefficient(i));
+    }
+    return new_polynomial;
+}
+
+template <class T>
+const Sequence<T> *Polynomial<T>::GetCoefficients() const {
+    return coefficients;
 }
 
 #endif

@@ -17,6 +17,7 @@ class Polynomial {
 
     public:
         Polynomial();
+        Polynomial(T item);
         explicit Polynomial(Sequence<T> *coeffs);
         Polynomial(const Polynomial<T> &other);
         Polynomial(Polynomial<T> &&other) noexcept;
@@ -38,15 +39,19 @@ class Polynomial {
         bool operator==(const Polynomial<T> &other) const;
         bool operator!=(const Polynomial<T> &other) const;
 
-
         int Degree() const;
+
         T GetCoefficient(int index) const;
         T Evaluate(const T &x) const;
+
         Polynomial<T> Compose(const Polynomial<T> &other) const;
 
-        const Sequence<T> *GetCoefficients() const { return coefficients; }
+        const Sequence<T> *GetCoefficients() const;
+
+        void print() const;
 };
 
 #include "PolynomialCore.h"
+#include "PolynomialUtils.h"
 
 #endif

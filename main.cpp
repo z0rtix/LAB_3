@@ -11,4 +11,21 @@ int main() {
     std::cout << p2.Degree() << std::endl;
     std::cout << p2.GetCoefficient(1) << std::endl;
     std::cout << p2.Evaluate(1) << std::endl;
+    Polynomial<int> p6 = p2 * 3;
+    p2.GetCoefficients()->print();
+    p3.GetCoefficients()->print();
+    p4.GetCoefficients()->print();
+    p5.GetCoefficients()->print();
+    p6.GetCoefficients()->print();
+
+    int data2[] = {1, 2, 3};
+    int data3[] = {1, 1};
+    MutableArraySequence<int> *seq2 = new MutableArraySequence(data2, 3);
+    MutableArraySequence<int> *seq3 = new MutableArraySequence(data3, 2);
+    Polynomial<int> p7(seq2);
+    Polynomial<int> p8(seq3);
+    Polynomial<int> p9 = p7.Compose(p8);
+    p9.GetCoefficients()->print();
+    p5.print();
+    std::cout << "END" << std::endl;
 }
