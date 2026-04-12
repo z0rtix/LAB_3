@@ -11,7 +11,7 @@ Polynomial<T>::Polynomial() {
 }
 
 template <class T>
-Polynomial<T>::Polynomial(const Polynomial<T> &other) {
+Polynomial<T>::Polynomial(Sequence<T> *coeffs) : coefficients(coeffs) {
     Normalize();
 }
 
@@ -35,6 +35,27 @@ void Polynomial<T>::Normalize() {
     while (coefficients->getLength() > 1 && coefficients->getLast() == T(0)) {
         coefficients->removeLast();
     }
+}
+
+template <class T>
+Polynomial<T> &Polynomial<T>::operator=(const Polynomial<T> &other) {
+    if (this != &other) {
+        delete coefficients;
+        coefficients = other.coefficients->copy();
+    }
+    
+    return *this;
+}
+
+template <class T>
+Polynomial<T> &Polynomial<T>::operator=(Polynomial<T> &&other) noexcept {
+    if (this != &other) {
+        delete coefficients;
+        coefficients = other.coefficients;
+        other.coefficients = nullptr;
+    }
+
+    return *this;
 }
 
 
