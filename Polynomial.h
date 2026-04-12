@@ -2,10 +2,10 @@
 #define POLYNOMIAL_h
 
 #include "Exceptions.h"
-#include "../LAB_2/Sequence.h"
+#include "../LAB_2/ListSequence.h"
+#include "../LAB_2/ArraySequence.h"
 
 #include <iostream>
-#include <cstddef>
 
 
 template <class T>
@@ -39,8 +39,8 @@ class Polynomial {
         bool operator!=(const Polynomial<T> &other) const;
 
 
-        size_t Degree() const;
-        T GetCoefficient(size_t index) const;
+        int Degree() const;
+        T GetCoefficient(int index) const;
         T Evaluate(const T &x) const;
         Polynomial<T> Compose(const Polynomial<T> &other) const;
 

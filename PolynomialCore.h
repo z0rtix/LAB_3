@@ -2,6 +2,7 @@
 #define POLYNOMIALCORE_H
 
 #include "Polynomial.h"
+#include <cmath>
 
 
 template <class T>
@@ -43,7 +44,7 @@ Polynomial<T> &Polynomial<T>::operator=(const Polynomial<T> &other) {
         delete coefficients;
         coefficients = other.coefficients->copy();
     }
-    
+
     return *this;
 }
 
@@ -58,5 +59,67 @@ Polynomial<T> &Polynomial<T>::operator=(Polynomial<T> &&other) noexcept {
     return *this;
 }
 
+template <class T>
+Polynomial<T> Polynomial<T>::operator+(const Polynomial<T> &other) const {
+    int len = coefficients->getLength();
+    int other_len = other.coefficients->getLength();
+    Polynomial<T> new_polynomial = Polynomial(((len > other_len) ? coefficients: other.coefficients)->copy());
+    for (int i = 0; i < ((len < other_len) ? len : other_len); i++) {
+        new_polynomial.coefficients->set(coefficients->get(i) + other.coefficients->get(i), i);
+    }
+    return new_polynomial;
+}
+
+template <class T>
+Polynomial<T> Polynomial<T>::operator-(const Polynomial<T> &other) const {
+    int len = coefficients->getLength();
+    int other_len = other.coefficients->getLength();
+    Polynomial<T> new_polynomial = Polynomial(((len > other_len) ? coefficients: other.coefficients)->copy());
+    for (int i = 0; i < other_len; i++) {
+        if (i < len) {
+            new_polynomial.coefficients->set(coefficients->get(i) - other.coefficients->get(i), i);
+        } else {
+            new_polynomial.coefficients->set(-1 * other.coefficients->get(i), i);
+        }
+    }
+    return new_polynomial;
+}
+
+template <class T>
+Polynomial<T> Polynomial<T>::operator*(const Polynomial<T> &other) const {
+    Polynomial<T> new_polynomial;
+    for (int i = 0; i < coefficients->getLength(); i++) {
+        for (int j = 0; j < other.coefficients->getLength(); j++) {
+            if (i + j < new_polynomial.coefficients->getLength()) {
+                new_polynomial.coefficients->set(coefficients->get(i) * other.coefficients->get(j) + new_polynomial.coefficients->get(i + j), i + j);
+            } else {
+                new_polynomial.coefficients->append(coefficients->get(i) * other.coefficients->get(j));
+            }
+        }
+    }
+    return new_polynomial;
+}
+
+template <class T>
+int Polynomial<T>::Degree() const {
+    return coefficients->getLength();
+}
+
+template <class T>
+T Polynomial<T>::GetCoefficient(int index) const {
+    if (index < 0 || index >= Degree()) {
+        throw PolynomialException();
+    }
+    return coefficients->get(index);
+}
+
+template <class T>
+T Polynomial<T>::Evaluate(const T &x) const {
+    T evaluate = T(0);
+    for (int i = Degree() - 1; i >= 0; i--) {
+        evaluate = evaluate * x + GetCoefficient(i);
+    }
+    return evaluate;
+}
 
 #endif
