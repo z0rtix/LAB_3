@@ -28,7 +28,7 @@ Polynomial<T>::Polynomial(const Polynomial<T> &other) {
 }
 
 template <class T>
-Polynomial<T>::Polynomial(Polynomial<T>&& other) noexcept: coefficients(other.coefficients) {
+Polynomial<T>::Polynomial(Polynomial<T> &&other) noexcept: coefficients(other.coefficients) {
     other.coefficients = nullptr;
 }
 
@@ -39,7 +39,7 @@ Polynomial<T>::~Polynomial() {
 
 template <class T>
 void Polynomial<T>::Normalize() {
-    while (coefficients->getLength() > 1 && coefficients->getLast() == T(0)) {
+    while (coefficients->getLength() > 1  &&coefficients->getLast() == T(0)) {
         coefficients->removeLast();
     }
 }
@@ -113,6 +113,48 @@ Polynomial<T> Polynomial<T>::operator*(const T &scalar) const {
         new_polynomial.coefficients->set(coefficients->get(i) * scalar, i);
     }
     return new_polynomial;
+}
+
+template <class T>
+Polynomial<T> &Polynomial<T>::operator+=(const Polynomial<T> &other) {
+    *this = *this + other;
+    return *this;
+}
+
+template <class T>
+Polynomial<T> &Polynomial<T>::operator-=(const Polynomial<T> &other) {
+    *this = *this - other;
+    return *this;
+}
+
+template <class T>
+Polynomial<T> &Polynomial<T>::operator*=(const Polynomial<T> &other) {
+    *this = *this * other;
+    return *this;
+}
+
+template <class T>
+Polynomial<T> &Polynomial<T>::operator*=(const T &scalar) {
+    *this = *this * scalar;
+    return *this;
+}
+
+template <class T>
+bool Polynomial<T>::operator==(const Polynomial<T>& other) const {
+    int len1 = Degree();
+    int len2 = other.Degree();
+    if (len1 != len2) return false;
+    
+    for (int i = 0; i < len1; ++i) {
+        if (GetCoefficient(i) != other.GetCoefficient(i))
+            return false;
+    }
+    return true;
+}
+
+template <class T>
+bool Polynomial<T>::operator!=(const Polynomial<T>& other) const {
+    return !(*this == other);
 }
 
 template <class T>

@@ -27,5 +27,6 @@ int main() {
     Polynomial<int> p9 = p7.Compose(p8);
     p9.GetCoefficients()->print();
     p5.print();
-    std::cout << "END" << std::endl;
+    bool b = p2 == p3;
+    std::cout << b << std::endl;
 }
