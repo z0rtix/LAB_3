@@ -41,4 +41,8 @@ int main() {
     Polynomial<int> p13 = p5.Derivative();
     p13.print();
     std::cout << p12 << std::endl;
+    p7.print();
+    Polynomial<int> p14 = p7.Integral();
+    p14.print();
+    p14.GetCoefficients()->print();
 }

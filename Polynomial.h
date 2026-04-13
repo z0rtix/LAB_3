@@ -46,6 +46,7 @@ class Polynomial {
 
         Polynomial<T> Compose(const Polynomial<T> &other) const;
         Polynomial<T> Derivative() const;
+        Polynomial<T> Integral() const;
 
         const Sequence<T> *GetCoefficients() const;
 
