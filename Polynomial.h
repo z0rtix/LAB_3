@@ -45,6 +45,7 @@ class Polynomial {
         T Evaluate(const T &x) const;
 
         Polynomial<T> Compose(const Polynomial<T> &other) const;
+        Polynomial<T> Derivative() const;
 
         const Sequence<T> *GetCoefficients() const;
 
@@ -53,5 +54,6 @@ class Polynomial {
 
 #include "PolynomialCore.h"
 #include "PolynomialUtils.h"
+#include "PolynomialOperations.h"
 
 #endif

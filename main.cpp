@@ -17,7 +17,6 @@ int main() {
     p4.GetCoefficients()->print();
     p5.GetCoefficients()->print();
     p6.GetCoefficients()->print();
-
     int data2[] = {1, 2, 3};
     int data3[] = {1, 1};
     MutableArraySequence<int> *seq2 = new MutableArraySequence(data2, 3);
@@ -29,4 +28,17 @@ int main() {
     p5.print();
     bool b = p2 == p3;
     std::cout << b << std::endl;
+    MutableArraySequence<int>* seq4 = new MutableArraySequence<int>();
+    seq4->append(1); seq4->append(2); seq4->append(3);   // 1 + 2x + 3x^2
+    Polynomial<int> p10(seq4);
+    Polynomial<int> p11 = p10.Compose(Polynomial<int>(2)); // P3(2) = 1 + 4 + 12 = 17
+    p11.print(); // "17"
+    p7.print();
+    Polynomial<int> p12 = p7.Derivative();
+    p12.print();
+    p12.GetCoefficients()->print();
+    p5.print();
+    Polynomial<int> p13 = p5.Derivative();
+    p13.print();
+    std::cout << p12 << std::endl;
 }
