@@ -25,5 +25,25 @@ Polynomial<T> Polynomial<T>::Integral() const {
     return new_polynomial;
 }
 
+template <class T>
+std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::Divide(const Polynomial<T> &other) const {
+    Polynomial<T> quotient(*this);
+    Polynomial<T> remainder;
+    Polynomial<T> temporary;
+    int index = Degree() - 1;
+    while (quotient.Degree() >= other.Degree() && index >= 0) {
+        T coeff = quotient.coefficients->getLast() / other.coefficients->getLast();
+        remainder.coefficients->prepend(coeff);
+        temporary = Polynomial(other) * coeff;
+        for (int i = other.Degree(); i < quotient.Degree(); i++) {
+            temporary.coefficients->prepend(0);
+        }
+        quotient -= temporary;
+        index--;
+        quotient.Normalize();
+    }
+    return {quotient, remainder};
+}
+
 
 #endif

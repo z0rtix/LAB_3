@@ -39,6 +39,7 @@ class Polynomial {
         bool operator==(const Polynomial<T> &other) const;
         bool operator!=(const Polynomial<T> &other) const;
 
+        void print() const;
         int Degree() const;
 
         T GetCoefficient(int index) const;
@@ -49,8 +50,8 @@ class Polynomial {
         Polynomial<T> Integral() const;
 
         const Sequence<T> *GetCoefficients() const;
-
-        void print() const;
+        
+        std::pair<Polynomial<T>, Polynomial<T>> Divide(const Polynomial<T> &other) const;
 };
 
 #include "PolynomialCore.h"

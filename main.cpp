@@ -1,5 +1,23 @@
 #include "Polynomial.h"
 
+
+void testDivision() {
+    // (x^2 - 1) / (x - 1) = x + 1, остаток 0
+    MutableArraySequence<int>* seq1 = new MutableArraySequence<int>();
+    seq1->append(-1); seq1->append(0); seq1->append(1);   // -1 + 0x + 1x^2
+    Polynomial<int> A(seq1);
+
+    MutableArraySequence<int>* seq2 = new MutableArraySequence<int>();
+    seq2->append(-1); seq2->append(1);   // -1 + x
+    Polynomial<int> B(seq2);
+
+    auto [Q, R] = A.Divide(B);   // C++17 structured binding
+
+    std::cout << "A = " << A << "\nB = " << B << std::endl;
+    std::cout << "Q = " << Q << "\nR = " << R << std::endl;
+}
+
+
 int main() {
     Polynomial<int> p1;
     int data[] = {1, 2, 3, 4, 5};
@@ -45,4 +63,11 @@ int main() {
     Polynomial<int> p14 = p7.Integral();
     p14.print();
     p14.GetCoefficients()->print();
+    p7.print();
+    p8.print();
+    auto [p15, p16] = p7.Divide(p8);
+    p15.print();
+    p16.print();
+
+    testDivision();
 }
