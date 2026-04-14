@@ -23,7 +23,7 @@ class Polynomial {
         Polynomial(Polynomial<T> &&other) noexcept;
         ~Polynomial();
 
-        const T& operator[](int index) const;
+        const T operator[](int index) const;
 
         Polynomial<T> &operator=(const Polynomial<T> &other);
         Polynomial<T> &operator=(Polynomial<T> &&other) noexcept;
@@ -61,7 +61,7 @@ class Polynomial {
         const Sequence<T> *GetCoefficients() const;
         
         std::pair<Polynomial<T>, Polynomial<T>> Divide(const Polynomial<T> &other) const;
-        static Polynomial<T> GCD(const Polynomial<T>& a, const Polynomial<T>& b);
+        Polynomial<T> GCD(const Polynomial<T>& other) const;
 };
 
 #include "PolynomialCore.h"
