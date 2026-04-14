@@ -26,6 +26,52 @@ Polynomial<T> Polynomial<T>::Integral() const {
 }
 
 template <class T>
+Polynomial<T> Polynomial<T>::Pow(int n) const {
+    if (n < 0) {
+        throw PolynomialException();
+    }
+    Polynomial<T> result(T(1));
+    for (int i = 0; i < n; ++i) {
+        result = result * (*this);
+    }
+    return result;
+}
+
+template <class T>
+Polynomial<T> Polynomial<T>::Shift(int k) const {
+    if (k < 0) {
+        throw PolynomialException();
+    } else if (k == 0) {
+        return *this;
+    }
+
+    Polynomial<T> result(*this);
+    for (int i = 0; i < k; ++i) {
+        result.coefficients->prepend(T(0));
+    }
+    return result;
+}
+
+template <class T>
+Polynomial<T> Polynomial<T>::ReduceFront(int n) const {
+    if (n == 0) return *this;
+
+    int removed = 0;
+    Polynomial<T> result(*this);
+    while (result.Degree() > 1 && result.GetCoefficient(0) == T(0)) {
+        if (n > 0 && removed >= n) break;
+        result.coefficients->removeFirst();
+        removed++;
+    }
+
+    if (n > 0 && removed < n) {
+        std::cout << "Warning: tried to remove " << n << " leading zeros, but only " << removed << " were present." << std::endl;
+    }
+
+    return result;
+}
+
+template <class T>
 std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::Divide(const Polynomial<T> &other) const {
     Polynomial<T> quotient(*this);
     Polynomial<T> remainder;

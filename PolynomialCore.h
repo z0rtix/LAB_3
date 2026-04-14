@@ -38,6 +38,14 @@ Polynomial<T>::~Polynomial() {
 }
 
 template <class T>
+const T& Polynomial<T>::operator[](int index) const {
+    if (index < 0 || index >= coefficients->getLength()) {
+        throw PolynomialException();
+    }
+    return coefficients.get(index);
+}
+
+template <class T>
 void Polynomial<T>::Normalize() {
     while (coefficients->getLength() > 1  &&coefficients->getLast() == T(0)) {
         coefficients->removeLast();
@@ -140,6 +148,37 @@ Polynomial<T> &Polynomial<T>::operator*=(const T &scalar) {
 }
 
 template <class T>
+Polynomial<T> Polynomial<T>::operator<<(int k) const {
+    if (k < 0) {
+        throw PolynomialException();
+    } else if (k == 0) {
+        return *this;
+    }
+    Polynomial<T> result(*this);
+    for (int i = 0; i < k; ++i) {
+        result.coefficients->prepend(T(0));
+    }
+    return result;
+}
+
+template <class T>
+Polynomial<T> Polynomial<T>::operator>>(int k) const {
+    if (k < 0) {
+        throw PolynomialException();
+    } else if (k == 0) {
+        return *this;
+    }
+    if (k >= Degree()) {
+        return Polynomial<T>();
+    }
+    Polynomial<T> result(*this);
+    for (int i = 0; i < k; ++i) {
+        result.coefficients->removeFirst();
+    }
+    return result;
+}
+
+template <class T>
 bool Polynomial<T>::operator==(const Polynomial<T>& other) const {
     int len1 = Degree();
     int len2 = other.Degree();
@@ -160,6 +199,14 @@ bool Polynomial<T>::operator!=(const Polynomial<T>& other) const {
 template <class T>
 int Polynomial<T>::Degree() const {
     return coefficients->getLength();
+}
+
+template <class T>
+void Polynomial<T>::SetCoefficient(T item, int index) {
+    if (index < 0 || index >= Degree()) {
+        throw PolynomialException();
+    }
+    coefficients->set(item, index);
 }
 
 template <class T>

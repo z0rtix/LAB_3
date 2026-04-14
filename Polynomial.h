@@ -23,6 +23,8 @@ class Polynomial {
         Polynomial(Polynomial<T> &&other) noexcept;
         ~Polynomial();
 
+        const T& operator[](int index) const;
+
         Polynomial<T> &operator=(const Polynomial<T> &other);
         Polynomial<T> &operator=(Polynomial<T> &&other) noexcept;
 
@@ -36,22 +38,30 @@ class Polynomial {
         Polynomial<T> &operator*=(const Polynomial<T> &other);
         Polynomial<T> &operator*=(const T &scalar);
 
+        Polynomial<T> operator<<(int n) const;
+        Polynomial<T> operator>>(int n) const;
+
         bool operator==(const Polynomial<T> &other) const;
         bool operator!=(const Polynomial<T> &other) const;
 
-        void print() const;
         int Degree() const;
-
+        void print() const;
+        void SetCoefficient(T item, int index);
+        
         T GetCoefficient(int index) const;
         T Evaluate(const T &x) const;
 
         Polynomial<T> Compose(const Polynomial<T> &other) const;
         Polynomial<T> Derivative() const;
         Polynomial<T> Integral() const;
+        Polynomial<T> Pow(int n) const;
+        Polynomial<T> Shift(int k) const;
+        Polynomial<T> ReduceFront(int n = -1) const;
 
         const Sequence<T> *GetCoefficients() const;
         
         std::pair<Polynomial<T>, Polynomial<T>> Divide(const Polynomial<T> &other) const;
+        static Polynomial<T> GCD(const Polynomial<T>& a, const Polynomial<T>& b);
 };
 
 #include "PolynomialCore.h"
