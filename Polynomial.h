@@ -12,7 +12,6 @@ template <class T>
 class Polynomial {
     private:
         Sequence<T> *coefficients;
-
         void Normalize();
 
     public:
@@ -61,11 +60,13 @@ class Polynomial {
         const Sequence<T> *GetCoefficients() const;
         
         std::pair<Polynomial<T>, Polynomial<T>> Divide(const Polynomial<T> &other) const;
-        Polynomial<T> GCD(const Polynomial<T>& other) const;
+        Polynomial<T> GCD(const Polynomial<T> &other) const;
 };
+
 
 #include "PolynomialCore.h"
 #include "PolynomialUtils.h"
 #include "PolynomialOperations.h"
+
 
 #endif

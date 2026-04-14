@@ -44,7 +44,6 @@ Polynomial<T> Polynomial<T>::Shift(int k) const {
     } else if (k == 0) {
         return *this;
     }
-
     Polynomial<T> result(*this);
     for (int i = 0; i < k; ++i) {
         result.coefficients->prepend(T(0));
@@ -63,11 +62,9 @@ Polynomial<T> Polynomial<T>::ReduceFront(int n) const {
         result.coefficients->removeFirst();
         removed++;
     }
-
     if (n > 0 && removed < n) {
-        std::cout << "Warning: tried to remove " << n << " leading zeros, but only " << removed << " were present." << std::endl;
+        std::cout << "⚠️ Warning: tried to remove " << n << " leading zeros, but only " << removed << " were present." << std::endl;
     }
-
     return result;
 }
 
@@ -94,12 +91,12 @@ std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::Divide(const Polynomial<T
 }
 
 template <class T>
-Polynomial<T> Polynomial<T>::GCD(const Polynomial<T>& other) const {
+Polynomial<T> Polynomial<T>::GCD(const Polynomial<T> &other) const {
     Polynomial<T> polynomial1(*this), polynomial2(other);
     while (polynomial2.Degree() != 1 || polynomial2.GetCoefficient(0) != T(0)) {
-        auto [_, r] = polynomial1.Divide(polynomial2);
+        auto [_, remainder] = polynomial1.Divide(polynomial2);
         polynomial1 = polynomial2;
-        polynomial2 = r;
+        polynomial2 = remainder;
     }
     return polynomial1;
 }

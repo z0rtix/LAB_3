@@ -109,11 +109,10 @@ Polynomial<T> Polynomial<T>::operator-(const Polynomial<T> &other) const {
 
 template <class T>
 Polynomial<T> Polynomial<T>::operator*(const Polynomial<T> &other) const {
-    if ((Degree() == 1 && GetCoefficient(0) == T(0)) ||
-        (other.Degree() == 1 && other.GetCoefficient(0) == T(0))) {
+    if ((Degree() == 1  && GetCoefficient(0) == T(0)) ||
+        (other.Degree() == 1  && other.GetCoefficient(0) == T(0))) {
         return Polynomial<T>();
     }
-    
     Polynomial<T> new_polynomial;
     for (int i = 0; i < coefficients->getLength(); i++) {
         for (int j = 0; j < other.coefficients->getLength(); j++) {
@@ -133,7 +132,6 @@ Polynomial<T> Polynomial<T>::operator*(const T &scalar) const {
     if (scalar == T(0)) {
         return Polynomial<T>();
     }
-
     Polynomial<T> new_polynomial(coefficients->copy());
     for (int i = 0; i < coefficients->getLength(); i++) {
         new_polynomial.coefficients->set(coefficients->get(i) * scalar, i);
@@ -198,7 +196,7 @@ Polynomial<T> Polynomial<T>::operator>>(int k) const {
 }
 
 template <class T>
-bool Polynomial<T>::operator==(const Polynomial<T>& other) const {
+bool Polynomial<T>::operator==(const Polynomial<T> &other) const {
     int len1 = Degree();
     int len2 = other.Degree();
     if (len1 != len2) return false;
@@ -211,7 +209,7 @@ bool Polynomial<T>::operator==(const Polynomial<T>& other) const {
 }
 
 template <class T>
-bool Polynomial<T>::operator!=(const Polynomial<T>& other) const {
+bool Polynomial<T>::operator!=(const Polynomial<T> &other) const {
     return !(*this == other);
 }
 
@@ -258,5 +256,6 @@ template <class T>
 const Sequence<T> *Polynomial<T>::GetCoefficients() const {
     return coefficients;
 }
+
 
 #endif
