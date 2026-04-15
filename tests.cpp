@@ -306,6 +306,8 @@ long long testPolynomial(ContainerType type) {
     return overall;
 }
 
+
+
 void runAllTests() {
     struct Result {
         const char *name;
