@@ -317,7 +317,7 @@ void runAllTests() {
     res.push_back({"double\t\t", testPolynomial<double>(ARRAY), testPolynomial<double>(LIST)});
     res.push_back({"complex<double>\t  ", testPolynomial<std::complex<double>>(ARRAY), testPolynomial<std::complex<double>>(LIST)});
 
-    std::cout << "\n========== PERFORMANCE SUMMARY ==========\n";
+    std::cout << "\n========================= PERFORMANCE SUMMARY ===========================\n";
     std::cout << "Type                  Array (ms)   List (ms)       Faster\n";
     std::cout << "-------------------------------------------------------------------------\n";
     for (const auto &r : res) {
