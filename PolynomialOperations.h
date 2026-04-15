@@ -63,7 +63,7 @@ Polynomial<T> Polynomial<T>::ReduceFront(int n) const {
         removed++;
     }
     if (n > 0 && removed < n) {
-        std::cout << "⚠️ Warning: tried to remove " << n << " leading zeros, but only " << removed << " were present." << std::endl;
+        std::cout << "⚠️  Warning: tried to remove " << n << " leading zeros, but only " << removed << " were present." << std::endl;
     }
     return result;
 }
