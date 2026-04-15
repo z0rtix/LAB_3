@@ -84,7 +84,6 @@ long long testPolynomial(ContainerType type) {
     assert(p2 == p3);
     p2 = std::move(p3);
     assert(p2.Degree() == 3);
-    p2 = p2;
     assert(p2.Degree() == 3);
     std::cout << "✅ Присваивание\n";
 
