@@ -1,3 +1,4 @@
+#include "Matrix.h"
 #include "Polynomial.h"
 #include "PolynomialUtils.h"
 
@@ -7,21 +8,21 @@
 #include <vector>
 
 
-enum ContainerType { ARRAY, LIST };
-
 template <typename T>
 Sequence<T> *createEmptySequence(ContainerType type) {
-    if (type == ARRAY)
-        return static_cast<Sequence<T> *>(new MutableArraySequence<T>());
-    else
-        return static_cast<Sequence<T> *>(new MutableListSequence<T>());
+    if (type == ARRAY) {
+        return static_cast<Sequence<T>*>(new MutableArraySequence<T>());
+    } else {
+        return static_cast<Sequence<T>*>(new MutableListSequence<T>());
+    }
 }
 
 template <typename T>
 Sequence<T> *createSequenceFromArray(const T *arr, int size, ContainerType type) {
     Sequence<T> *seq = createEmptySequence<T>(type);
-    for (int i = 0; i < size; ++i)
+    for (int i = 0; i < size; ++i) {
         seq->append(arr[i]);
+    }
     return seq;
 }
 
@@ -306,7 +307,48 @@ long long testPolynomial(ContainerType type) {
     return overall;
 }
 
+template <typename T>
+void testMatrixForTypeAndContainer(ContainerType rowType, ContainerType colType, const char* typeName, const char* contName) {
+    Matrix<T> A(2, rowType, colType);
+    A.set(0,0, T(1));
+    A.set(0,1, T(2));
+    A.set(1,0, T(3));
+    A.set(1,1, T(4));
 
+    Matrix<T> B(2, rowType, colType);
+    B.set(0,0, T(2));
+    B.set(0,1, T(0));
+    B.set(1,0, T(1));
+    B.set(1,1, T(2));
+
+    Polynomial<Matrix<T>> pA(A);
+    Polynomial<Matrix<T>> pB(B);
+    Polynomial<Matrix<T>> pSum = pA + pB;
+
+    bool ok = true;
+    if constexpr (std::is_floating_point<T>::value) {
+        ok &= std::abs(pSum.GetCoefficient(0).get(0,0) - T(3)) < 1e-9;
+        ok &= std::abs(pSum.GetCoefficient(0).get(1,1) - T(6)) < 1e-9;
+    } else {
+        ok &= pSum.GetCoefficient(0).get(0,0) == T(3);
+        ok &= pSum.GetCoefficient(0).get(1,1) == T(6);
+    }
+
+    if (ok) {
+        std::cout << "✅ " << contName << "<" << typeName << "> passed\n";
+    } else {
+        std::cout << "❌ " << contName << "<" << typeName << "> failed\n";
+    }
+}
+
+void runMatrixTests() {
+    std::cout << "====== Matrix Polynomial Tests ======\n";
+    testMatrixForTypeAndContainer<int>(ARRAY, ARRAY, "int", "Array");
+    testMatrixForTypeAndContainer<int>(LIST, LIST, "int", "List");
+    testMatrixForTypeAndContainer<double>(ARRAY, ARRAY, "double", "Array");
+    testMatrixForTypeAndContainer<double>(LIST, LIST, "double", "List");
+    std::cout << "==========================================\n";
+}
 
 void runAllTests() {
     struct Result {
@@ -318,6 +360,7 @@ void runAllTests() {
     res.push_back({"int\t\t", testPolynomial<int>(ARRAY), testPolynomial<int>(LIST)});
     res.push_back({"double\t\t", testPolynomial<double>(ARRAY), testPolynomial<double>(LIST)});
     res.push_back({"complex<double>\t  ", testPolynomial<std::complex<double>>(ARRAY), testPolynomial<std::complex<double>>(LIST)});
+    runMatrixTests();
 
     std::cout << "\n========================= PERFORMANCE SUMMARY ===========================\n";
     std::cout << "Type                  Array (ms)   List (ms)       Faster\n";
