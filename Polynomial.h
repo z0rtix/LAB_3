@@ -17,9 +17,9 @@ class Polynomial {
     public:
         Polynomial();
         Polynomial(T item);
-        explicit Polynomial(Sequence<T> *coeffs);
+        Polynomial(Sequence<T> *coeffs);
         Polynomial(const Polynomial<T> &other);
-        Polynomial(Polynomial<T> &&other) noexcept;
+        Polynomial(Polynomial<T> &&other);
         ~Polynomial();
 
         const T operator[](int index) const;

@@ -34,7 +34,7 @@ Polynomial<T>::Polynomial(const Polynomial<T> &other) {
 }
 
 template <class T>
-Polynomial<T>::Polynomial(Polynomial<T> &&other) noexcept: coefficients(other.coefficients) {
+Polynomial<T>::Polynomial(Polynomial<T> &&other): coefficients(other.coefficients) {
     other.coefficients = nullptr;
 }
 
