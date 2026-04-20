@@ -2,6 +2,7 @@
 #define POLYNOMIALCORE_H
 
 #include "Polynomial.h"
+
 #include <cmath>
 
 
@@ -20,7 +21,7 @@ Polynomial<T>::Polynomial(T item) {
 template <class T>
 Polynomial<T>::Polynomial(Sequence<T> *coeffs) : coefficients(coeffs) {
     if (!coefficients) {
-        throw PolynomialException();
+        throw PolynomialException("Null coefficients");
     } else if (coefficients->getLength() == 0) {
         coefficients->append(T(0));
     }
@@ -29,8 +30,11 @@ Polynomial<T>::Polynomial(Sequence<T> *coeffs) : coefficients(coeffs) {
 
 template <class T>
 Polynomial<T>::Polynomial(const Polynomial<T> &other) {
-    if (!other.coefficients) throw PolynomialException();
-    coefficients = other.coefficients->copy();
+    if (!other.coefficients) {
+        throw PolynomialException("Null sequence");
+    } else {
+        coefficients = other.coefficients->copy();
+    }
 }
 
 template <class T>
@@ -46,14 +50,15 @@ Polynomial<T>::~Polynomial() {
 template <class T>
 const T Polynomial<T>::operator[](int index) const {
     if (index < 0 || index >= coefficients->getLength()) {
-        throw PolynomialException();
+        throw PolynomialException("Index out of range");
+    } else {
+        return coefficients->get(index);
     }
-    return coefficients->get(index);
 }
 
 template <class T>
 void Polynomial<T>::Normalize() {
-    while (coefficients->getLength() > 1  &&coefficients->getLast() == T(0)) {
+    while (coefficients->getLength() > 1 && coefficients->getLast() == T(0)) {
         coefficients->removeLast();
     }
 }
@@ -64,7 +69,6 @@ Polynomial<T> &Polynomial<T>::operator=(const Polynomial<T> &other) {
         delete coefficients;
         coefficients = other.coefficients->copy();
     }
-
     return *this;
 }
 
@@ -75,7 +79,6 @@ Polynomial<T> &Polynomial<T>::operator=(Polynomial<T> &&other) noexcept {
         coefficients = other.coefficients;
         other.coefficients = nullptr;
     }
-
     return *this;
 }
 
@@ -221,7 +224,7 @@ int Polynomial<T>::Degree() const {
 template <class T>
 void Polynomial<T>::SetCoefficient(T item, int index) {
     if (index < 0 || index >= Degree()) {
-        throw PolynomialException();
+        throw PolynomialException("Index out of range");
     }
     coefficients->set(item, index);
 }
@@ -229,7 +232,7 @@ void Polynomial<T>::SetCoefficient(T item, int index) {
 template <class T>
 T Polynomial<T>::GetCoefficient(int index) const {
     if (index < 0 || index >= Degree()) {
-        throw PolynomialException();
+        throw PolynomialException("Index out of range");
     }
     return coefficients->get(index);
 }

@@ -23,16 +23,22 @@ Polynomial<T> Polynomial<T>::Integral() const {
         new_polynomial.coefficients->append(GetCoefficient(i) / T(i + 1));
     }
     return new_polynomial;
-}
+}   
 
 template <class T>
 Polynomial<T> Polynomial<T>::Pow(int n) const {
     if (n < 0) {
-        throw PolynomialException();
+        throw PolynomialException("Negative exponent");
     }
     Polynomial<T> result(T(1));
-    for (int i = 0; i < n; ++i) {
-        result = result * (*this);
+    Polynomial<T> base(*this);
+    while (n > 0) {
+        if (n % 2 == 1) {
+            result =  result * base
+        } else {
+            base = base * base
+        }
+        n = n / 2;
     }
     return result;
 }
@@ -40,7 +46,7 @@ Polynomial<T> Polynomial<T>::Pow(int n) const {
 template <class T>
 Polynomial<T> Polynomial<T>::Shift(int k) const {
     if (k < 0) {
-        throw PolynomialException();
+        throw PolynomialException("Shift must be non-negative");
     } else if (k == 0) {
         return *this;
     }
@@ -63,14 +69,14 @@ Polynomial<T> Polynomial<T>::ReduceFront(int n) const {
         removed++;
     }
     if (n > 0 && removed < n) {
-        std::cout << "⚠️  Warning: tried to remove " << n << " leading zeros, but only " << removed << " were present." << std::endl;
+        throw PolynomialException("Not enough leading zeros to remove");
     }
     return result;
 }
 
 template <class T>
 std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::Divide(const Polynomial<T> &other) const {
-    if (other.Degree() == 1 && other.GetCoefficient(0) == T(0)) throw PolynomialException();
+    if (other.Degree() == 1 && other.GetCoefficient(0) == T(0)) throw PolynomialException("Division by zero polynomial");
     Polynomial<T> remainder(*this);
     Polynomial<T> quotient;
     Polynomial<T> temporary;

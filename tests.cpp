@@ -221,9 +221,9 @@ long long testPolynomial(ContainerType type) {
 
     Polynomial<T> shifted2 = p11.Shift(2);
     assert(shifted2.ReduceFront() == p11);
-    assert(p11.ReduceFront(5) == p11);
+    assert(throwsException<PolynomialException>([&]() { p11.ReduceFront(5); }));
     assert(p11.ReduceFront(0) == p11);
-    assert(zero.ReduceFront(3) == zero);
+    assert(throwsException<PolynomialException>([&]() { zero.ReduceFront(3); }));
     std::cout << "✅ ReduceFront\n";
 
     T aA[] = {T(-1), T(0), T(1)};
