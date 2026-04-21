@@ -1,5 +1,5 @@
-#ifndef POLYNOMIAL_h
-#define POLYNOMIAL_h
+#ifndef POLYNOMIAL_H
+#define POLYNOMIAL_H
 
 #include "Exceptions.h"
 #include "../LAB_2/ListSequence.h"
@@ -17,9 +17,9 @@ class Polynomial {
     public:
         Polynomial();
         Polynomial(T item);
-        Polynomial(Sequence<T> *coeffs);
+        explicit Polynomial(Sequence<T> *coeffs);
         Polynomial(const Polynomial<T> &other);
-        Polynomial(Polynomial<T> &&other);
+        Polynomial(Polynomial<T> &&other) noexcept;
         ~Polynomial();
 
         const T operator[](int index) const;

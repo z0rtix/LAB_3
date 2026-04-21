@@ -3,8 +3,6 @@
 
 #include "Polynomial.h"
 
-#include <cmath>
-
 
 template <class T>
 Polynomial<T>::Polynomial() {
@@ -38,7 +36,7 @@ Polynomial<T>::Polynomial(const Polynomial<T> &other) {
 }
 
 template <class T>
-Polynomial<T>::Polynomial(Polynomial<T> &&other): coefficients(other.coefficients) {
+Polynomial<T>::Polynomial(Polynomial<T> &&other) noexcept: coefficients(other.coefficients) {
     other.coefficients = nullptr;
 }
 
@@ -103,7 +101,7 @@ Polynomial<T> Polynomial<T>::operator-(const Polynomial<T> &other) const {
         if (i < len) {
             new_polynomial.coefficients->set(coefficients->get(i) - other.coefficients->get(i), i);
         } else {
-            new_polynomial.coefficients->set(T(-1) * other.coefficients->get(i), i);
+            new_polynomial.coefficients->set(-other.coefficients->get(i), i);
         }
     }
     new_polynomial.Normalize();
@@ -170,7 +168,7 @@ Polynomial<T> &Polynomial<T>::operator*=(const T &scalar) {
 template <class T>
 Polynomial<T> Polynomial<T>::operator<<(int k) const {
     if (k < 0) {
-        throw PolynomialException();
+        throw PolynomialException("Negative value");
     } else if (k == 0) {
         return *this;
     }
@@ -184,7 +182,7 @@ Polynomial<T> Polynomial<T>::operator<<(int k) const {
 template <class T>
 Polynomial<T> Polynomial<T>::operator>>(int k) const {
     if (k < 0) {
-        throw PolynomialException();
+        throw PolynomialException("Negative value");
     } else if (k == 0) {
         return *this;
     }

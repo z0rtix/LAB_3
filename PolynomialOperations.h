@@ -34,10 +34,9 @@ Polynomial<T> Polynomial<T>::Pow(int n) const {
     Polynomial<T> base(*this);
     while (n > 0) {
         if (n % 2 == 1) {
-            result =  result * base
-        } else {
-            base = base * base
+            result =  result * base;
         }
+        base = base * base;
         n = n / 2;
     }
     return result;
@@ -51,7 +50,7 @@ Polynomial<T> Polynomial<T>::Shift(int k) const {
         return *this;
     }
     Polynomial<T> result(*this);
-    for (int i = 0; i < k; ++i) {
+    for (int i = 0; i < k; i++) {
         result.coefficients->prepend(T(0));
     }
     return result;
