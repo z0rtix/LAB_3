@@ -7,10 +7,12 @@
 template <class T>
 std::ostream &operator<<(std::ostream &os, const Polynomial<T> &polynomial) {
     int deg = polynomial.Degree();
+
     if (deg == 1  &&polynomial.GetCoefficient(0) == T(0)) {
         os << "0";
         return os;
     }
+
     bool isFirst = true;
     for (int i = deg - 1; i >= 0; --i) {
         T coeff = polynomial.GetCoefficient(i);
@@ -32,16 +34,19 @@ std::ostream &operator<<(std::ostream &os, const Polynomial<T> &polynomial) {
             if (i > 1) os << "^" << i;
         }
     }
+
     return os;
 }
 
 template <class T>
 void Polynomial<T>::print() const {
     int deg = Degree();
+
     if (deg == 1  &&GetCoefficient(0) == T(0)) {
         std::cout << "0" << std::endl;
         return;
     }
+
     bool isFirst = true;
     for (int i = deg - 1; i >= 0; --i) {
         T coeff = GetCoefficient(i);
@@ -63,6 +68,7 @@ void Polynomial<T>::print() const {
             if (i > 1) std::cout << "^" << i;
         }
     }
+    
     std::cout << std::endl;
 }
 

@@ -14,13 +14,16 @@ template <typename T>
 class Matrix {
     private:
         Sequence<Sequence<T>*> *data;
+
         int size;
         void copyFrom(const Matrix<T> &other) {
             size = other.size;
             data = new MutableArraySequence<Sequence<T>*>();
+
             for (int i = 0; i < size; i++) {
                 const Sequence<T> *srcRow = other.data->get(i);
                 MutableArraySequence<T> *newRow = new MutableArraySequence<T>();
+
                 for (int j = 0; j < size; j++)
                     newRow->append(srcRow->get(j));
                 data->append(newRow);
@@ -48,10 +51,9 @@ class Matrix {
             } else {
                 data = new MutableListSequence<Sequence<T>*>();
             }
+
             for (int i = 0; i < n; i++) {
-                Sequence<T> *row = (colType == ARRAY)
-                    ? static_cast<Sequence<T>*>(new MutableArraySequence<T>())
-                    : static_cast<Sequence<T>*>(new MutableListSequence<T>());
+                Sequence<T> *row = (colType == ARRAY) ? static_cast<Sequence<T>*>(new MutableArraySequence<T>()) : static_cast<Sequence<T>*>(new MutableListSequence<T>());
                 for (int j = 0; j < n; j++)
                     row->append(T(0));
                 data->append(row);
@@ -66,6 +68,7 @@ class Matrix {
             for (int i = 0; i < size; i++) {
                 delete data->get(i);
             }
+
             delete data;
         }
 
@@ -75,6 +78,7 @@ class Matrix {
                 delete data;
                 copyFrom(other);
             }
+
             return *this;
         }
 
@@ -92,21 +96,25 @@ class Matrix {
 
         Matrix<T> operator+(const Matrix<T> &other) const {
             Matrix<T> res(size, ARRAY, ARRAY);
+
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
                     res.set(i, j, get(i, j) + other.get(i, j));
                 }
             }
+
             return res;
         }
 
         bool operator==(const Matrix<T> &other) const {
             if (size != other.size) return false;
+
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
                     if (get(i, j) != other.get(i, j)) return false;
                 }
             }
+
             return true;
         }
 
@@ -118,11 +126,13 @@ class Matrix {
 template <typename T>
 std::ostream& operator<<(std::ostream &os, const Matrix<T> &m) {
     int sz = m.getSize();
+
     for (int i = 0; i < sz; i++) {
         for (int j = 0; j < sz; j++)
             os << m.get(i, j) << " ";
         if (i < sz - 1) os << "\n";
     }
+    
     return os;
 }
 

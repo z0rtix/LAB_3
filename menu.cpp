@@ -48,6 +48,7 @@ Sequence<T> *createEmptySequence(ContainerType cont) {
 template <typename T>
 Polynomial<T> createPolynomialManual(ContainerType cont) {
     Sequence<T> *seq = createEmptySequence<T>(cont);
+
     int deg = inputNumber<int>("Введите степень (начиная с 0): ");
     for (int i = 0; i <= deg; i++) {
         std::ostringstream oss;
@@ -55,15 +56,18 @@ Polynomial<T> createPolynomialManual(ContainerType cont) {
         T coeff = inputNumber<T>(oss.str());
         seq->append(coeff);
     }
+
     return Polynomial<T>(seq);
 }
 
 template <typename T>
 Polynomial<T> createTestPolynomial(ContainerType cont) {
     Sequence<T> *seq = createEmptySequence<T>(cont);
+
     seq->append(T(1));
     seq->append(T(2));
     seq->append(T(3));
+
     return Polynomial<T>(seq);
 }
 
@@ -91,6 +95,7 @@ class PolynomialMenu {
             std::cout << "Нет многочленов.\n";
             return;
         }
+
         std::cout << "Текущий многочлен [" << currentIndex << "]: ";
         std::cout << current() << "  (степень " << current().Degree() << ")\n";
     }
@@ -100,6 +105,7 @@ class PolynomialMenu {
             std::cout << "Список многочленов пуст. Создайте новый.\n";
             return false;
         }
+
         return true;
     }
 
@@ -124,10 +130,12 @@ class PolynomialMenu {
                 std::cout << "\n===== МЕНЮ МНОГОЧЛЕНОВ (тип " << typeid(T).name() << ") =====\n";
                 printCurrent();
                 std::cout << "Список многочленов: ";
+
                 for (size_t i = 0; i < polynomials.size(); i++) {
                     if (i == currentIndex) std::cout << "[" << i << "] ";
                     else std::cout << i << " ";
                 }
+
                 std::cout << "\n";
                 std::cout << "1. Создать новый многочлен\n";
                 std::cout << "2. Переключиться на другой многочлен\n";
@@ -172,6 +180,7 @@ class PolynomialMenu {
         void createPolynomial() {
             std::cout << "1 - Ввести вручную\n2 - Тестовый [1,2,3]\n";
             int c = inputNumber<int>("> ");
+
             Polynomial<T> p;
             if (c == 1) {
                 p = createPolynomialManual<T>(containerType);
@@ -179,12 +188,14 @@ class PolynomialMenu {
                 p = createTestPolynomial<T>(containerType);
             }
             addPolynomial(p);
+
             std::cout << "Создан: " << current() << "\n";
         }
 
         void switchPolynomial() {
             if (!ensureNotEmpty()) return;
             size_t idx = inputNumber<size_t>("Введите индекс многочлена: ");
+
             if (idx < polynomials.size()) {
                 currentIndex = idx;
                 printCurrent();
@@ -197,6 +208,7 @@ class PolynomialMenu {
             if (!ensureNotEmpty()) return;
             std::cout << "1. +\n2. -\n3. * (многочлен)\n4. * (скаляр)\n";
             int op = inputNumber<int>("> ");
+
             Polynomial<T> result;
             if (op == 4) {
                 T scalar = inputNumber<T>("Скаляр: ");
@@ -205,10 +217,12 @@ class PolynomialMenu {
                 });
             } else {
                 size_t idx = inputNumber<size_t>("Индекс второго многочлена: ");
+
                 if (idx >= polynomials.size()) {
                     std::cout << "Неверный индекс.\n";
                     return;
                 }
+
                 const Polynomial<T> &other = polynomials[idx];
                 if (op == 1) {
                     benchmark("Сложение", [&]() { result = current() + other; });
@@ -220,6 +234,7 @@ class PolynomialMenu {
                     return;
                 }
             }
+
             std::cout << "Результат: " << result << "\n";
             if (askReplace()) current() = result;
         }
@@ -228,19 +243,23 @@ class PolynomialMenu {
             if (!ensureNotEmpty()) return;
             T x = inputNumber<T>("x = ");
             T val;
+
             benchmark("Evaluate", [&]() {
                 val = current().Evaluate(x);
             });
+
             std::cout << "P(" << x << ") = " << val << "\n";
         }
 
         void compose() {
             if (!ensureNotEmpty()) return;
             size_t idx = inputNumber<size_t>("Индекс многочлена Q: ");
+
             if (idx >= polynomials.size()) {
                 std::cout << "Неверный индекс.\n";
                 return;
             }
+
             Polynomial<T> result;
             benchmark("Compose", [&]() { result = current().Compose(polynomials[idx]); });
             std::cout << "P(Q) = " << result << "\n";
@@ -250,9 +269,11 @@ class PolynomialMenu {
         void derivative() {
             if (!ensureNotEmpty()) return;
             Polynomial<T> result;
+
             benchmark("Derivative", [&]() {
                 result = current().Derivative();
             });
+
             std::cout << "P' = " << result << "\n";
             if (askReplace()) current() = result;
         }
@@ -260,9 +281,11 @@ class PolynomialMenu {
         void integral() {
             if (!ensureNotEmpty()) return;
             Polynomial<T> result;
+
             benchmark("Integral", [&]() {
                 result = current().Integral();
             });
+
             std::cout << "∫P dx = " << result << " + C\n";
             if (askReplace()) current() = result;
         }
@@ -270,14 +293,17 @@ class PolynomialMenu {
         void power() {
             if (!ensureNotEmpty()) return;
             int n = inputNumber<int>("Степень n: ");
+
             if (n < 0) {
                 std::cout << "Степень должна быть >= 0\n";
                 return;
             }
+
             Polynomial<T> result;
             benchmark("Pow", [&]() {
                 result = current().Pow(n);
             });
+            
             std::cout << "P^" << n << " = " << result << "\n";
             if (askReplace()) current() = result;
         }

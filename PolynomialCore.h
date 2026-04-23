@@ -67,6 +67,7 @@ Polynomial<T> &Polynomial<T>::operator=(const Polynomial<T> &other) {
         delete coefficients;
         coefficients = other.coefficients->copy();
     }
+
     return *this;
 }
 
@@ -77,6 +78,7 @@ Polynomial<T> &Polynomial<T>::operator=(Polynomial<T> &&other) noexcept {
         coefficients = other.coefficients;
         other.coefficients = nullptr;
     }
+
     return *this;
 }
 
@@ -84,11 +86,13 @@ template <class T>
 Polynomial<T> Polynomial<T>::operator+(const Polynomial<T> &other) const {
     int len = coefficients->getLength();
     int other_len = other.coefficients->getLength();
+
     Polynomial<T> new_polynomial = Polynomial(((len > other_len) ? coefficients: other.coefficients)->copy());
     for (int i = 0; i < ((len < other_len) ? len : other_len); i++) {
         new_polynomial.coefficients->set(coefficients->get(i) + other.coefficients->get(i), i);
     }
     new_polynomial.Normalize();
+
     return new_polynomial;
 }
 
@@ -96,6 +100,7 @@ template <class T>
 Polynomial<T> Polynomial<T>::operator-(const Polynomial<T> &other) const {
     int len = coefficients->getLength();
     int other_len = other.coefficients->getLength();
+
     Polynomial<T> new_polynomial = Polynomial(((len > other_len) ? coefficients: other.coefficients)->copy());
     for (int i = 0; i < other_len; i++) {
         if (i < len) {
@@ -105,6 +110,7 @@ Polynomial<T> Polynomial<T>::operator-(const Polynomial<T> &other) const {
         }
     }
     new_polynomial.Normalize();
+
     return new_polynomial;
 }
 
@@ -114,6 +120,7 @@ Polynomial<T> Polynomial<T>::operator*(const Polynomial<T> &other) const {
         (other.Degree() == 1  && other.GetCoefficient(0) == T(0))) {
         return Polynomial<T>();
     }
+
     Polynomial<T> new_polynomial;
     for (int i = 0; i < coefficients->getLength(); i++) {
         for (int j = 0; j < other.coefficients->getLength(); j++) {
@@ -125,6 +132,7 @@ Polynomial<T> Polynomial<T>::operator*(const Polynomial<T> &other) const {
         }
     }
     new_polynomial.Normalize();
+
     return new_polynomial;
 }
 
@@ -133,11 +141,13 @@ Polynomial<T> Polynomial<T>::operator*(const T &scalar) const {
     if (scalar == T(0)) {
         return Polynomial<T>();
     }
+
     Polynomial<T> new_polynomial(coefficients->copy());
     for (int i = 0; i < coefficients->getLength(); i++) {
         new_polynomial.coefficients->set(coefficients->get(i) * scalar, i);
     }
     new_polynomial.Normalize();
+
     return new_polynomial;
 }
 
@@ -172,10 +182,12 @@ Polynomial<T> Polynomial<T>::operator<<(int k) const {
     } else if (k == 0) {
         return *this;
     }
+
     Polynomial<T> result(*this);
     for (int i = 0; i < k; ++i) {
         result.coefficients->prepend(T(0));
     }
+
     return result;
 }
 
@@ -186,13 +198,16 @@ Polynomial<T> Polynomial<T>::operator>>(int k) const {
     } else if (k == 0) {
         return *this;
     }
+
     if (k >= Degree()) {
         return Polynomial<T>();
     }
+
     Polynomial<T> result(*this);
     for (int i = 0; i < k; ++i) {
         result.coefficients->removeFirst();
     }
+
     return result;
 }
 
@@ -200,12 +215,15 @@ template <class T>
 bool Polynomial<T>::operator==(const Polynomial<T> &other) const {
     int len1 = Degree();
     int len2 = other.Degree();
+
     if (len1 != len2) return false;
     
     for (int i = 0; i < len1; ++i) {
-        if (GetCoefficient(i) != other.GetCoefficient(i))
+        if (GetCoefficient(i) != other.GetCoefficient(i)) {
             return false;
+        }
     }
+
     return true;
 }
 
@@ -224,6 +242,7 @@ void Polynomial<T>::SetCoefficient(T item, int index) {
     if (index < 0 || index >= Degree()) {
         throw PolynomialException("Index out of range");
     }
+
     coefficients->set(item, index);
 }
 
@@ -232,6 +251,7 @@ T Polynomial<T>::GetCoefficient(int index) const {
     if (index < 0 || index >= Degree()) {
         throw PolynomialException("Index out of range");
     }
+
     return coefficients->get(index);
 }
 
@@ -241,6 +261,7 @@ T Polynomial<T>::Evaluate(const T &x) const {
     for (int i = Degree() - 1; i >= 0; i--) {
         evaluate = evaluate * x + GetCoefficient(i);
     }
+
     return evaluate;
 }
 
@@ -250,6 +271,7 @@ Polynomial<T> Polynomial<T>::Compose(const Polynomial<T> &other) const {
     for (int i = Degree() - 1; i >= 0; i--) {
         new_polynomial = new_polynomial * other + Polynomial(GetCoefficient(i));
     }
+    
     return new_polynomial;
 }
 
