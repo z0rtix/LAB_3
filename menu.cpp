@@ -293,7 +293,6 @@ class PolynomialMenu {
         void power() {
             if (!ensureNotEmpty()) return;
             int n = inputNumber<int>("Степень n: ");
-
             if (n < 0) {
                 std::cout << "Степень должна быть >= 0\n";
                 return;
@@ -303,7 +302,7 @@ class PolynomialMenu {
             benchmark("Pow", [&]() {
                 result = current().Pow(n);
             });
-            
+
             std::cout << "P^" << n << " = " << result << "\n";
             if (askReplace()) current() = result;
         }
@@ -315,10 +314,12 @@ class PolynomialMenu {
                 std::cout << "Сдвиг должен быть >= 0\n";
                 return;
             }
+
             Polynomial<T> result;
             benchmark("Shift", [&]() {
                 result = current().Shift(k);
             });
+
             std::cout << "P * x^" << k << " = " << result << "\n";
             if (askReplace()) current() = result;
         }
@@ -327,10 +328,12 @@ class PolynomialMenu {
             if (!ensureNotEmpty()) return;
             int n = inputNumber<int>("Удалить ведущих нулей (0 - без ограничений): ");
             if (n == 0) n = -1;
+
             Polynomial<T> result;
             benchmark("ReduceFront", [&]() {
                 result = current().ReduceFront(n);
             });
+
             std::cout << "После сокращения: " << result << "\n";
             if (askReplace()) current() = result;
         }
@@ -342,6 +345,7 @@ class PolynomialMenu {
                 std::cout << "Неверный индекс.\n";
                 return;
             }
+
             auto result = current().Divide(polynomials[idx]);
             std::cout << "Частное: " << result.first << "\n";
             std::cout << "Остаток: " << result.second << "\n";
@@ -355,6 +359,7 @@ class PolynomialMenu {
                 std::cout << "Неверный индекс.\n";
                 return;
             }
+
             Polynomial<T> result = current().GCD(polynomials[idx]);
             std::cout << "НОД = " << result << "\n";
             if (askReplace()) current() = result;
@@ -367,6 +372,7 @@ class PolynomialMenu {
                 std::cout << "Неверный индекс.\n";
                 return;
             }
+
             bool eq = current() == polynomials[idx];
             std::cout << "Равны: " << (eq ? "да" : "нет") << "\n";
         }
@@ -374,6 +380,7 @@ class PolynomialMenu {
         void access() {
             if (!ensureNotEmpty()) return;
             std::cout << "1. Получить коэффициент\n2. Установить коэффициент\n";
+
             int c = inputNumber<int>("> ");
             if (c == 1) {
                 int idx = inputNumber<int>("Индекс: ");
@@ -399,11 +406,13 @@ class PolynomialMenu {
             const int DEG = 100;
             Sequence<T> *seqA = new MutableArraySequence<T>();
             Sequence<T> *seqL = new MutableListSequence<T>();
+
             for (int i = 0; i <= DEG; i++) {
                 T val = T(i % 10 + 1);
                 seqA->append(val);
                 seqL->append(val);
             }
+
             Polynomial<T> pA(seqA), pL(seqL);
             auto timeOp = [&](const Polynomial<T> &p1, const Polynomial<T> &p2,
                             std::function<Polynomial<T>(const Polynomial<T>&, const Polynomial<T>&)> f) {
@@ -413,11 +422,13 @@ class PolynomialMenu {
                 auto end = high_resolution_clock::now();
                 return duration_cast<milliseconds>(end - start).count();
             };
+
             std::cout << "Умножение многочленов степени " << DEG << ":\n";
             long long tArr = timeOp(pA, pA, [](auto &a, auto &b) { return a * b; });
             long long tList = timeOp(pL, pL, [](auto &a, auto &b) { return a * b; });
             std::cout << "Array: " << tArr << " ms\n";
             std::cout << "List:  " << tList << " ms\n";
+
             if (tArr < tList)
                 std::cout << "Array быстрее в " << (double)tList / tArr << " раз\n";
             else
@@ -437,9 +448,11 @@ void runMenu() {
     std::cout << "===== ВЫБОР ТИПА ДАННЫХ =====\n";
     std::cout << "1 - int\n2 - double\n";
     int dt = inputNumber<int>("> ");
+
     std::cout << "===== ВЫБОР КОНТЕЙНЕРА =====\n";
     std::cout << "1 - Array\n2 - List\n";
     int ct = inputNumber<int>("> ");
+    
     ContainerType cont = (ct == 1) ? ARRAY : LIST;
     if (dt == 1) {
         PolynomialMenu<int> menu(cont);

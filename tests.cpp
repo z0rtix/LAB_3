@@ -23,6 +23,7 @@ Sequence<T> *createSequenceFromArray(const T *arr, int size, ContainerType type)
     for (int i = 0; i < size; ++i) {
         seq->append(arr[i]);
     }
+    
     return seq;
 }
 
@@ -356,6 +357,7 @@ void runAllTests() {
         long long arr;
         long long lst;
     };
+
     std::vector<Result> res;
     res.push_back({"int\t\t", testPolynomial<int>(ARRAY), testPolynomial<int>(LIST)});
     res.push_back({"double\t\t", testPolynomial<double>(ARRAY), testPolynomial<double>(LIST)});
