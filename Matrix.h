@@ -14,8 +14,8 @@ template <typename T>
 class Matrix {
     private:
         Sequence<Sequence<T>*> *data;
-
         int size;
+
         void copyFrom(const Matrix<T> &other) {
             size = other.size;
             data = new MutableArraySequence<Sequence<T>*>();
@@ -64,6 +64,11 @@ class Matrix {
             copyFrom(other);
         }
 
+        Matrix(Matrix &&other) noexcept : data(other.data), size(other.size) {
+            other.data = nullptr;
+            other.size = 0;
+        }
+
         ~Matrix() {
             for (int i = 0; i < size; i++) {
                 delete data->get(i);
@@ -81,16 +86,34 @@ class Matrix {
 
             return *this;
         }
+    
+        Matrix<T> &operator=(Matrix &&other) noexcept {
+            if (this != &other) {
+                for (int i = 0; i < size; i++) delete data->get(i);
+                delete data;
+                data = other.data;
+                size = other.size;
+                other.data = nullptr;
+                other.size = 0;
+            }
+            return *this;
+        }
 
         int getSize() const {
             return size;
         }
 
         T get(int i, int j) const {
+            if (i < 0 || i >= size || j < 0 || j >= size) {
+                throw IndexOutOfRange();
+            }
             return data->get(i)->get(j);
         }
 
         void set(int i, int j, const T &val) {
+            if (i < 0 || i >= size || j < 0 || j >= size) {
+                throw IndexOutOfRange();
+            }
             data->get(i)->set(val, j);
         }
 
