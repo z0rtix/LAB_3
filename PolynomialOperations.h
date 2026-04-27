@@ -7,12 +7,13 @@
 template <class T>
 Polynomial<T> Polynomial<T>::Derivative() const {
     Polynomial<T> new_polynomial;
-    for (int i = 1; i < Degree(); i++) {
+
+    new_polynomial.coefficients->clear();
+    for (int i = 1; i < Length(); i++) {
         new_polynomial.coefficients->append(GetCoefficient(i) * T(i));
     }
-
-    if (new_polynomial.Degree() > 1) {
-        new_polynomial.coefficients->removeFirst();
+    if (new_polynomial.coefficients->getLength() == 0) {
+        new_polynomial.coefficients->append(T(0));
     }
 
     return new_polynomial;
@@ -22,7 +23,7 @@ template <class T>
 Polynomial<T> Polynomial<T>::Integral() const {
     Polynomial<T> new_polynomial;
 
-    for (int i = 0; i < Degree(); i++) {
+    for (int i = 0; i < Length(); i++) {
         new_polynomial.coefficients->append(GetCoefficient(i) / T(i + 1));
     }
 
@@ -71,7 +72,7 @@ Polynomial<T> Polynomial<T>::ReduceFront(int n) const {
 
     int removed = 0;
     Polynomial<T> result(*this);
-    while (result.Degree() > 1 && result.GetCoefficient(0) == T(0)) {
+    while (result.Degree() > 0 && result.GetCoefficient(0) == T(0)) {
         if (n > 0 && removed >= n) break;
         result.coefficients->removeFirst();
         removed++;
@@ -86,13 +87,13 @@ Polynomial<T> Polynomial<T>::ReduceFront(int n) const {
 
 template <class T>
 std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::Divide(const Polynomial<T> &other) const {
-    if (other.Degree() == 1 && other.GetCoefficient(0) == T(0)) throw PolynomialException("Division by zero polynomial");
+    if (other.Degree() == 0 && other.GetCoefficient(0) == T(0)) throw PolynomialException("Division by zero polynomial");
 
     Polynomial<T> remainder(*this);
     Polynomial<T> quotient;
     Polynomial<T> temporary;
 
-    int index = Degree() - 1;
+    int index = Degree();
     while (remainder.Degree() >= other.Degree() && index >= 0) {
         T coeff = remainder.coefficients->getLast() / other.coefficients->getLast();
         quotient.coefficients->prepend(coeff);
@@ -113,7 +114,7 @@ template <class T>
 Polynomial<T> Polynomial<T>::GCD(const Polynomial<T> &other) const {
     Polynomial<T> polynomial1(*this), polynomial2(other);
     
-    while (polynomial2.Degree() != 1 || polynomial2.GetCoefficient(0) != T(0)) {
+    while (polynomial2.Degree() != 0 || polynomial2.GetCoefficient(0) != T(0)) {
         auto [_, remainder] = polynomial1.Divide(polynomial2);
         polynomial1 = polynomial2;
         polynomial2 = remainder;

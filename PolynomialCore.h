@@ -116,8 +116,8 @@ Polynomial<T> Polynomial<T>::operator-(const Polynomial<T> &other) const {
 
 template <class T>
 Polynomial<T> Polynomial<T>::operator*(const Polynomial<T> &other) const {
-    if ((Degree() == 1  && GetCoefficient(0) == T(0)) ||
-        (other.Degree() == 1  && other.GetCoefficient(0) == T(0))) {
+    if ((Degree() == 0  && GetCoefficient(0) == T(0)) ||
+        (other.Degree() == 0  && other.GetCoefficient(0) == T(0))) {
         return Polynomial<T>();
     }
 
@@ -199,7 +199,7 @@ Polynomial<T> Polynomial<T>::operator>>(int k) const {
         return *this;
     }
 
-    if (k >= Degree()) {
+    if (k >= Length()) {
         return Polynomial<T>();
     }
 
@@ -213,8 +213,8 @@ Polynomial<T> Polynomial<T>::operator>>(int k) const {
 
 template <class T>
 bool Polynomial<T>::operator==(const Polynomial<T> &other) const {
-    int len1 = Degree();
-    int len2 = other.Degree();
+    int len1 = Length();
+    int len2 = other.Length();
 
     if (len1 != len2) return false;
     
@@ -233,13 +233,18 @@ bool Polynomial<T>::operator!=(const Polynomial<T> &other) const {
 }
 
 template <class T>
-int Polynomial<T>::Degree() const {
+int Polynomial<T>::Length() const {
     return coefficients->getLength();
 }
 
 template <class T>
+int Polynomial<T>::Degree() const {
+    return coefficients->getLength() - 1;
+}
+
+template <class T>
 void Polynomial<T>::SetCoefficient(T item, int index) {
-    if (index < 0 || index >= Degree()) {
+    if (index < 0 || index >= Length()) {
         throw PolynomialException("Index out of range");
     }
 
@@ -248,7 +253,7 @@ void Polynomial<T>::SetCoefficient(T item, int index) {
 
 template <class T>
 T Polynomial<T>::GetCoefficient(int index) const {
-    if (index < 0 || index >= Degree()) {
+    if (index < 0 || index >= Length()) {
         throw PolynomialException("Index out of range");
     }
 
@@ -258,7 +263,7 @@ T Polynomial<T>::GetCoefficient(int index) const {
 template <class T>
 T Polynomial<T>::Evaluate(const T &x) const {
     T evaluate = T(0);
-    for (int i = Degree() - 1; i >= 0; i--) {
+    for (int i = Length() - 1; i >= 0; i--) {
         evaluate = evaluate * x + GetCoefficient(i);
     }
 
@@ -268,7 +273,7 @@ T Polynomial<T>::Evaluate(const T &x) const {
 template <class T>
 Polynomial<T> Polynomial<T>::Compose(const Polynomial<T> &other) const {
     Polynomial<T> new_polynomial;
-    for (int i = Degree() - 1; i >= 0; i--) {
+    for (int i = Degree(); i >= 0; i--) {
         new_polynomial = new_polynomial * other + Polynomial(GetCoefficient(i));
     }
     

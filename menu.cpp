@@ -97,7 +97,7 @@ class PolynomialMenu {
         }
 
         std::cout << "Текущий многочлен [" << currentIndex << "]: ";
-        std::cout << current() << "  (степень " << current().Degree() << ")\n";
+        std::cout << current() << "  (степень " << current().Length() << ")\n";
     }
 
     bool ensureNotEmpty() const {

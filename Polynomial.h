@@ -43,6 +43,7 @@ class Polynomial {
         bool operator==(const Polynomial<T> &other) const;
         bool operator!=(const Polynomial<T> &other) const;
 
+        int Length() const;
         int Degree() const;
         void print() const;
         void SetCoefficient(T item, int index);

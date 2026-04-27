@@ -6,7 +6,7 @@
 
 template <class T>
 std::ostream &operator<<(std::ostream &os, const Polynomial<T> &polynomial) {
-    int deg = polynomial.Degree();
+    int deg = polynomial.Length();
 
     if (deg == 1  &&polynomial.GetCoefficient(0) == T(0)) {
         os << "0";
@@ -40,7 +40,7 @@ std::ostream &operator<<(std::ostream &os, const Polynomial<T> &polynomial) {
 
 template <class T>
 void Polynomial<T>::print() const {
-    int deg = Degree();
+    int deg = Length();
 
     if (deg == 1  &&GetCoefficient(0) == T(0)) {
         std::cout << "0" << std::endl;

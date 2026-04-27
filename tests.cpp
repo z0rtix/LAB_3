@@ -52,16 +52,16 @@ long long testPolynomial(ContainerType type) {
     auto totalStart = high_resolution_clock::now();
 
     Polynomial<T> p0;
-    assert(p0.Degree() == 1);
+    assert(p0.Length() == 1);
     assert(p0.GetCoefficient(0) == T(0));
 
     Polynomial<T> pConst(T(5));
-    assert(pConst.Degree() == 1);
+    assert(pConst.Length() == 1);
     assert(pConst.GetCoefficient(0) == T(5));
 
     T arr1[] = {T(1), T(2), T(3)};
     Polynomial<T> p1 = makePoly(arr1, 3, type);
-    assert(p1.Degree() == 3);
+    assert(p1.Length() == 3);
     assert(p1[0] == T(1));
     assert(p1[1] == T(2));
     assert(p1[2] == T(3));
@@ -74,7 +74,7 @@ long long testPolynomial(ContainerType type) {
 
     Sequence<T> *emptySeq = createEmptySequence<T>(type);
     Polynomial<T> pEmpty(emptySeq);
-    assert(pEmpty.Degree() == 1);
+    assert(pEmpty.Length() == 1);
     assert(pEmpty[0] == T(0));
     std::cout << "✅ Конструкторы\n";
 
@@ -85,8 +85,8 @@ long long testPolynomial(ContainerType type) {
     p2 = p3;
     assert(p2 == p3);
     p2 = std::move(p3);
-    assert(p2.Degree() == 3);
-    assert(p2.Degree() == 3);
+    assert(p2.Length() == 3);
+    assert(p2.Length() == 3);
     std::cout << "✅ Присваивание\n";
 
     T a1[] = {T(1), T(2), T(3)};
@@ -114,7 +114,7 @@ long long testPolynomial(ContainerType type) {
     assert(p6 == zero);
 
     Polynomial<T> sum = p4 + p5;
-    assert(sum.Degree() == 3);
+    assert(sum.Length() == 3);
     assert(sum[0] == T(1));
     assert(sum[1] == T(3));
     assert(sum[2] == T(3));
@@ -125,7 +125,7 @@ long long testPolynomial(ContainerType type) {
     assert(diff[2] == T(3));
 
     Polynomial<T> prod = p4 * p5;
-    assert(prod.Degree() == 4);
+    assert(prod.Length() == 4);
     assert(prod[0] == T(0));
     assert(prod[1] == T(1));
     assert(prod[2] == T(2));
@@ -152,40 +152,40 @@ long long testPolynomial(ContainerType type) {
     Polynomial<T> P = makePoly(aP, 3, type);
     Polynomial<T> Q = makePoly(aQ, 2, type);
     Polynomial<T> comp = P.Compose(Q);
-    assert(comp.Degree() == 3);
+    assert(comp.Length() == 3);
     assert(comp[0] == T(2));
     assert(comp[1] == T(4));
     assert(comp[2] == T(4));
 
     Polynomial<T> C(T(3));
     Polynomial<T> compC = P.Compose(C);
-    assert(compC.Degree() == 1);
+    assert(compC.Length() == 1);
     assert(compC[0] == T(10));
     std::cout << "✅ Compose\n";
 
     T arr5[] = {T(3), T(2), T(1)};
     Polynomial<T> p8 = makePoly(arr5, 3, type);
     Polynomial<T> deriv = p8.Derivative();
-    assert(deriv.Degree() == 2);
+    assert(deriv.Length() == 2);
     assert(deriv[0] == T(2));
     assert(deriv[1] == T(2));
 
     Polynomial<T> constPoly(T(5));
     Polynomial<T> derivConst = constPoly.Derivative();
-    assert(derivConst.Degree() == 1);
+    assert(derivConst.Length() == 1);
     assert(derivConst[0] == T(0));
     std::cout << "✅ Derivative\n";
 
     T arr6[] = {T(2), T(2)};
     Polynomial<T> p9 = makePoly(arr6, 2, type);
     Polynomial<T> integ = p9.Integral();
-    assert(integ.Degree() == 3);
+    assert(integ.Length() == 3);
     assert(integ[0] == T(0));
     assert(integ[1] == T(2));
     assert(integ[2] == T(1));
 
     Polynomial<T> integZero = zero.Integral();
-    assert(integZero.Degree() == 2);
+    assert(integZero.Length() == 2);
     assert(integZero[0] == T(0));
     assert(integZero[1] == T(0));
     std::cout << "✅ Integral\n";
@@ -193,13 +193,13 @@ long long testPolynomial(ContainerType type) {
     T arr7[] = {T(1), T(1)};
     Polynomial<T> p10 = makePoly(arr7, 2, type);
     Polynomial<T> p3pow = p10.Pow(3);
-    assert(p3pow.Degree() == 4);
+    assert(p3pow.Length() == 4);
     assert(p3pow[0] == T(1));
     assert(p3pow[1] == T(3));
     assert(p3pow[2] == T(3));
     assert(p3pow[3] == T(1));
 
-    assert(p10.Pow(0).Degree() == 1);
+    assert(p10.Pow(0).Length() == 1);
     assert(p10.Pow(0)[0] == T(1));
 
     assert(zero.Pow(5) == zero);
@@ -209,7 +209,7 @@ long long testPolynomial(ContainerType type) {
     T arr8[] = {T(1), T(2), T(3)};
     Polynomial<T> p11 = makePoly(arr8, 3, type);
     Polynomial<T> shifted = p11.Shift(2);
-    assert(shifted.Degree() == 5);
+    assert(shifted.Length() == 5);
     assert(shifted[0] == T(0));
     assert(shifted[1] == T(0));
     assert(shifted[2] == T(1));
@@ -232,10 +232,10 @@ long long testPolynomial(ContainerType type) {
     Polynomial<T> A = makePoly(aA, 3, type);
     Polynomial<T> B = makePoly(aB, 2, type);
     auto [Qdiv, Rdiv] = A.Divide(B);
-    assert(Qdiv.Degree() == 2);
+    assert(Qdiv.Length() == 2);
     assert(Qdiv[0] == T(1));
     assert(Qdiv[1] == T(1));
-    assert(Rdiv.Degree() == 1);
+    assert(Rdiv.Length() == 1);
     assert(Rdiv[0] == T(0));
     std::cout << "✅ Divide\n";
 
@@ -246,7 +246,7 @@ long long testPolynomial(ContainerType type) {
     Polynomial<T> c1(T(6));
     Polynomial<T> c2(T(10));
     Polynomial<T> g = c1.GCD(c2);
-    assert(g.Degree() == 1);
+    assert(g.Length() == 1);
     if constexpr (std::is_same<T, int>::value)
         assert(g[0] == 2);
     std::cout << "✅ GCD\n";
@@ -275,13 +275,13 @@ long long testPolynomial(ContainerType type) {
     seq->append(T(0));
     seq->append(T(0));
     Polynomial<T> pNorm(seq);
-    assert(pNorm.Degree() == 2);
+    assert(pNorm.Length() == 2);
     assert(pNorm[0] == T(1));
     assert(pNorm[1] == T(2));
 
     T arr10[] = {T(1), T(2)};
     Polynomial<T> p14 = makePoly(arr10, 2, type);
-    assert((p14 - p14).Degree() == 1);
+    assert((p14 - p14).Length() == 1);
     assert((p14 - p14)[0] == T(0));
     std::cout << "✅ Нормализация\n";
 
