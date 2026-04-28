@@ -24,8 +24,10 @@ class Matrix {
                 const Sequence<T> *srcRow = other.data->get(i);
                 MutableArraySequence<T> *newRow = new MutableArraySequence<T>();
 
-                for (int j = 0; j < size; j++)
+                for (int j = 0; j < size; j++) {
                     newRow->append(srcRow->get(j));
+                }
+
                 data->append(newRow);
             }
         }
@@ -54,8 +56,10 @@ class Matrix {
 
             for (int i = 0; i < n; i++) {
                 Sequence<T> *row = (colType == ARRAY) ? static_cast<Sequence<T>*>(new MutableArraySequence<T>()) : static_cast<Sequence<T>*>(new MutableListSequence<T>());
+
                 for (int j = 0; j < n; j++)
                     row->append(T(0));
+                
                 data->append(row);
             }
         }
@@ -64,7 +68,7 @@ class Matrix {
             copyFrom(other);
         }
 
-        Matrix(Matrix &&other) noexcept : data(other.data), size(other.size) {
+        Matrix(Matrix<T> &&other) noexcept : data(other.data), size(other.size) {
             other.data = nullptr;
             other.size = 0;
         }
@@ -79,7 +83,10 @@ class Matrix {
 
         Matrix<T> &operator=(const Matrix<T> &other) {
             if (this != &other) {
-                for (int i = 0; i < size; i++) delete data->get(i);
+                for (int i = 0; i < size; i++) {
+                    delete data->get(i);
+                }
+
                 delete data;
                 copyFrom(other);
             }
@@ -87,15 +94,19 @@ class Matrix {
             return *this;
         }
     
-        Matrix<T> &operator=(Matrix &&other) noexcept {
+        Matrix<T> &operator=(Matrix<T> &&other) noexcept {
             if (this != &other) {
-                for (int i = 0; i < size; i++) delete data->get(i);
+                for (int i = 0; i < size; i++) {
+                    delete data->get(i);
+                }
+
                 delete data;
                 data = other.data;
                 size = other.size;
                 other.data = nullptr;
                 other.size = 0;
             }
+
             return *this;
         }
 
@@ -107,6 +118,7 @@ class Matrix {
             if (i < 0 || i >= size || j < 0 || j >= size) {
                 throw IndexOutOfRange();
             }
+
             return data->get(i)->get(j);
         }
 
@@ -114,6 +126,7 @@ class Matrix {
             if (i < 0 || i >= size || j < 0 || j >= size) {
                 throw IndexOutOfRange();
             }
+
             data->get(i)->set(val, j);
         }
 
@@ -148,12 +161,14 @@ class Matrix {
 
 template <typename T>
 std::ostream& operator<<(std::ostream &os, const Matrix<T> &m) {
-    int sz = m.getSize();
+    int size = m.getSize();
 
-    for (int i = 0; i < sz; i++) {
-        for (int j = 0; j < sz; j++)
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
             os << m.get(i, j) << " ";
-        if (i < sz - 1) os << "\n";
+        }
+
+        if (i < size - 1) os << "\n";
     }
     
     return os;

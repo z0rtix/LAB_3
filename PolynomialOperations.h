@@ -6,88 +6,92 @@
 
 template <class T>
 Polynomial<T> Polynomial<T>::Derivative() const {
-    Polynomial<T> new_polynomial;
+    Polynomial<T> derivative;
 
-    new_polynomial.coefficients->clear();
+    derivative.coefficients->clear();
+
     for (int i = 1; i < Length(); i++) {
-        new_polynomial.coefficients->append(GetCoefficient(i) * T(i));
-    }
-    if (new_polynomial.coefficients->getLength() == 0) {
-        new_polynomial.coefficients->append(T(0));
+        derivative.coefficients->append(GetCoefficient(i) * T(i));
     }
 
-    return new_polynomial;
+    if (derivative.coefficients->getLength() == 0) {
+        derivative.coefficients->append(T(0));
+    }
+
+    return derivative;
 }
 
 template <class T>
 Polynomial<T> Polynomial<T>::Integral() const {
-    Polynomial<T> new_polynomial;
+    Polynomial<T> integral;
 
     for (int i = 0; i < Length(); i++) {
-        new_polynomial.coefficients->append(GetCoefficient(i) / T(i + 1));
+        integral.coefficients->append(GetCoefficient(i) / T(i + 1));
     }
 
-    return new_polynomial;
+    return integral;
 }   
 
 template <class T>
-Polynomial<T> Polynomial<T>::Pow(int n) const {
-    if (n < 0) {
-        throw PolynomialException("Negative exponent");
-    }
+Polynomial<T> Polynomial<T>::Pow(int exponent) const {
+    if (exponent < 0) throw PolynomialException("Negative exponent");
 
-    Polynomial<T> result(T(1));
+    Polynomial<T> power(T(1));
     Polynomial<T> base(*this);
 
-    while (n > 0) {
-        if (n % 2 == 1) {
-            result =  result * base;
+    while (exponent > 0) {
+        if (exponent % 2 == 1) {
+            power =  power * base;
         }
         base = base * base;
-        n = n / 2;
+        exponent = exponent / 2;
     }
 
-    return result;
+    return power;
 }
 
 template <class T>
-Polynomial<T> Polynomial<T>::Shift(int k) const {
-    if (k < 0) {
+Polynomial<T> Polynomial<T>::Shift(int exponent) const {
+    if (exponent < 0) {
         throw PolynomialException("Shift must be non-negative");
-    } else if (k == 0) {
+    } else if (exponent == 0) {
         return *this;
     }
 
-    Polynomial<T> result(*this);
-    for (int i = 0; i < k; i++) {
-        result.coefficients->prepend(T(0));
+    Polynomial<T> shifted(*this);
+
+    for (int i = 0; i < exponent; i++) {
+        shifted.coefficients->prepend(T(0));
     }
 
-    return result;
+    return shifted;
 }
 
 template <class T>
-Polynomial<T> Polynomial<T>::ReduceFront(int n) const {
-    if (n == 0) return *this;
+Polynomial<T> Polynomial<T>::ReduceFront(int exponent) const {
+    if (exponent == 0) return *this;
 
     int removed = 0;
-    Polynomial<T> result(*this);
-    while (result.Degree() > 0 && result.GetCoefficient(0) == T(0)) {
-        if (n > 0 && removed >= n) break;
-        result.coefficients->removeFirst();
+    Polynomial<T> reduced(*this);
+
+    while (reduced.Degree() > 0 && reduced.GetCoefficient(0) == T(0)) {
+        if (exponent > 0 && removed >= exponent) break;
+        reduced.coefficients->removeFirst();
         removed++;
     }
 
-    if (n > 0 && removed < n) {
+    if (exponent > 0 && removed < exponent) {
         throw PolynomialException("Not enough leading zeros to remove");
     }
 
-    return result;
+    return reduced;
 }
 
 template <class T>
 std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::Divide(const Polynomial<T> &other) const {
-    if (other.Degree() == 0 && other.GetCoefficient(0) == T(0)) throw PolynomialException("Division by zero polynomial");
+    if (other.Degree() == 0 && other.GetCoefficient(0) == T(0)) {
+        throw PolynomialException("Division by zero polynomial");
+    }
 
     Polynomial<T> remainder(*this);
     Polynomial<T> quotient;
@@ -98,9 +102,11 @@ std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::Divide(const Polynomial<T
         T coeff = remainder.coefficients->getLast() / other.coefficients->getLast();
         quotient.coefficients->prepend(coeff);
         temporary = Polynomial(other) * coeff;
+
         for (int i = other.Degree(); i < remainder.Degree(); i++) {
             temporary.coefficients->prepend(0);
         }
+
         remainder -= temporary;
         remainder.Normalize();
         quotient.Normalize();

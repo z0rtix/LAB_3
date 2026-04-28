@@ -14,7 +14,7 @@ std::ostream &operator<<(std::ostream &os, const Polynomial<T> &polynomial) {
     }
 
     bool isFirst = true;
-    for (int i = deg - 1; i >= 0; --i) {
+    for (int i = deg - 1; i >= 0; i--) {
         T coeff = polynomial.GetCoefficient(i);
         if (coeff == T(0)) continue;
 
@@ -27,6 +27,7 @@ std::ostream &operator<<(std::ostream &os, const Polynomial<T> &polynomial) {
 
         T absCoeff = (coeff < T(0)) ? -coeff : coeff;
         bool needCoeff = (i == 0) || (absCoeff != T(1));
+
         if (needCoeff) os << absCoeff;
 
         if (i > 0) {
@@ -48,7 +49,7 @@ void Polynomial<T>::print() const {
     }
 
     bool isFirst = true;
-    for (int i = deg - 1; i >= 0; --i) {
+    for (int i = deg - 1; i >= 0; i--) {
         T coeff = GetCoefficient(i);
         if (coeff == T(0)) continue;
 
@@ -61,6 +62,7 @@ void Polynomial<T>::print() const {
 
         T absCoeff = (coeff < T(0)) ? -coeff : coeff;
         bool needCoeff = (i == 0) || (absCoeff != T(1));
+        
         if (needCoeff) std::cout << absCoeff;
 
         if (i > 0) {

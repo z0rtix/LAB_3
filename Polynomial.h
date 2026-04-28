@@ -16,7 +16,7 @@ class Polynomial {
 
     public:
         Polynomial();
-        Polynomial(T item);
+        Polynomial(T coeff);
         explicit Polynomial(Sequence<T> *coeffs);
         Polynomial(const Polynomial<T> &other);
         Polynomial(Polynomial<T> &&other) noexcept;
@@ -37,16 +37,17 @@ class Polynomial {
         Polynomial<T> &operator*=(const Polynomial<T> &other);
         Polynomial<T> &operator*=(const T &scalar);
 
-        Polynomial<T> operator<<(int n) const;
-        Polynomial<T> operator>>(int n) const;
+        Polynomial<T> operator<<(int exponent) const;
+        Polynomial<T> operator>>(int exponent) const;
 
         bool operator==(const Polynomial<T> &other) const;
         bool operator!=(const Polynomial<T> &other) const;
 
         int Length() const;
         int Degree() const;
+
         void print() const;
-        void SetCoefficient(T item, int index);
+        void SetCoefficient(T coeff, int index);
         
         T GetCoefficient(int index) const;
         T Evaluate(const T &x) const;
@@ -54,9 +55,9 @@ class Polynomial {
         Polynomial<T> Compose(const Polynomial<T> &other) const;
         Polynomial<T> Derivative() const;
         Polynomial<T> Integral() const;
-        Polynomial<T> Pow(int n) const;
-        Polynomial<T> Shift(int k) const;
-        Polynomial<T> ReduceFront(int n = -1) const;
+        Polynomial<T> Pow(int exponent) const;
+        Polynomial<T> Shift(int exponent) const;
+        Polynomial<T> ReduceFront(int exponent = -1) const;
 
         const Sequence<T> *GetCoefficients() const;
         
