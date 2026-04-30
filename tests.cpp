@@ -20,7 +20,7 @@ Sequence<T> *createEmptySequence(ContainerType type) {
 template <typename T>
 Sequence<T> *createSequenceFromArray(const T *arr, int size, ContainerType type) {
     Sequence<T> *seq = createEmptySequence<T>(type);
-    for (int i = 0; i < size; ++i) {
+    for (int i = 0; i < size; i++) {
         seq->append(arr[i]);
     }
     

@@ -289,7 +289,7 @@ class PolynomialMenu {
             std::cout << "∫P dx = " << result << " + C\n";
             if (askReplace()) current() = result;
         }
-
+        
         void power() {
             if (!ensureNotEmpty()) return;
             int n = inputNumber<int>("Степень n: ");
@@ -333,7 +333,7 @@ class PolynomialMenu {
             benchmark("ReduceFront", [&]() {
                 result = current().ReduceFront(n);
             });
-
+            
             std::cout << "После сокращения: " << result << "\n";
             if (askReplace()) current() = result;
         }
