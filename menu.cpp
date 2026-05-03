@@ -151,7 +151,6 @@ class PolynomialMenu {
                 std::cout << "12. GCD\n";
                 std::cout << "13. Сравнение\n";
                 std::cout << "14. Доступ к коэффициентам\n";
-                std::cout << "15. Сравнить производительность Array vs List\n";
                 std::cout << "0. Выход\n";
                 int choice = inputNumber<int>("> ");
 
@@ -170,7 +169,6 @@ class PolynomialMenu {
                     case 12: gcd(); break;
                     case 13: compare(); break;
                     case 14: access(); break;
-                    case 15: performance(); break;
                     case 0: exit = true; break;
                     default: std::cout << "Неверный выбор.\n";
                 }
@@ -399,40 +397,6 @@ class PolynomialMenu {
                     std::cout << "Ошибка: выход за границы.\n";
                 }
             }
-        }
-
-        void performance() {
-            std::cout << "Сравнение Array vs List для типа " << typeid(T).name() << "\n";
-            const int DEG = 100;
-            Sequence<T> *seqA = new MutableArraySequence<T>();
-            Sequence<T> *seqL = new MutableListSequence<T>();
-
-            for (int i = 0; i <= DEG; i++) {
-                T val = T(i % 10 + 1);
-                seqA->append(val);
-                seqL->append(val);
-            }
-
-            Polynomial<T> pA(seqA), pL(seqL);
-            auto timeOp = [&](const Polynomial<T> &p1, const Polynomial<T> &p2,
-                            std::function<Polynomial<T>(const Polynomial<T>&, const Polynomial<T>&)> f) {
-                using namespace std::chrono;
-                auto start = high_resolution_clock::now();
-                volatile auto res = f(p1, p2);
-                auto end = high_resolution_clock::now();
-                return duration_cast<milliseconds>(end - start).count();
-            };
-
-            std::cout << "Умножение многочленов степени " << DEG << ":\n";
-            long long tArr = timeOp(pA, pA, [](auto &a, auto &b) { return a * b; });
-            long long tList = timeOp(pL, pL, [](auto &a, auto &b) { return a * b; });
-            std::cout << "Array: " << tArr << " ms\n";
-            std::cout << "List:  " << tList << " ms\n";
-
-            if (tArr < tList)
-                std::cout << "Array быстрее в " << (double)tList / tArr << " раз\n";
-            else
-                std::cout << "List быстрее в " << (double)tArr / tList << " раз\n";
         }
 
         bool askReplace() {
