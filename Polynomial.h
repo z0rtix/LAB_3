@@ -1,11 +1,9 @@
 #ifndef POLYNOMIAL_H
 #define POLYNOMIAL_H
 
-#include "Exceptions.h"
-#include "../LAB_2/ListSequence.h"
-#include "../LAB_2/ArraySequence.h"
+#include "../LAB_2/Sequence.h"
 
-#include <iostream>
+#include <utility>
 
 
 template <class T>
@@ -66,9 +64,11 @@ class Polynomial {
 };
 
 
-#include "PolynomialCore.h"
-#include "PolynomialUtils.h"
-#include "PolynomialOperations.h"
+template <class T>
+class Polynomial;
+
+template <class T>
+std::ostream& operator<<(std::ostream&, const Polynomial<T>&);
 
 
 #endif

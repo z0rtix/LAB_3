@@ -1,6 +1,9 @@
 #include "menu.h"
+#include "Exceptions.h"
 #include "Polynomial.h"
-#include "PolynomialUtils.h"
+
+#include "../LAB_2/ArraySequence.h"
+#include "../LAB_2/ListSequence.h"
 
 #include <iostream>
 #include <vector>

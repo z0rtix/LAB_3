@@ -1,6 +1,8 @@
 #include "Matrix.h"
+#include "Exceptions.h"
 #include "Polynomial.h"
-#include "PolynomialUtils.h"
+#include "../LAB_2/ArraySequence.h"
+#include "../LAB_2/ListSequence.h"
 
 #include <cassert>
 #include <chrono>
@@ -46,9 +48,10 @@ bool throwsException(Func func) {
 
 template <typename T>
 long long testPolynomial(ContainerType type) {
+    std::cout << "=========================================\n";
+
     using namespace std::chrono;
     const char *container = (type == ARRAY) ? "Array" : "List";
-    std::cout << "=== TESTS FOR Polynomial<" << typeid(T).name() << "> ON " << container << " ===\n";
     auto totalStart = high_resolution_clock::now();
 
     Polynomial<T> p0;
@@ -76,7 +79,6 @@ long long testPolynomial(ContainerType type) {
     Polynomial<T> pEmpty(emptySeq);
     assert(pEmpty.Length() == 1);
     assert(pEmpty[0] == T(0));
-    std::cout << "✅ Конструкторы\n";
 
     T arr2[] = {T(1), T(2)};
     T arr3[] = {T(3), T(4), T(5)};
@@ -87,7 +89,6 @@ long long testPolynomial(ContainerType type) {
     p2 = std::move(p3);
     assert(p2.Length() == 3);
     assert(p2.Length() == 3);
-    std::cout << "✅ Присваивание\n";
 
     T a1[] = {T(1), T(2), T(3)};
     T a2[] = {T(0), T(1)};
@@ -135,7 +136,6 @@ long long testPolynomial(ContainerType type) {
     assert(scaled[0] == T(2));
     assert(scaled[1] == T(4));
     assert(scaled[2] == T(6));
-    std::cout << "✅ Арифметика\n";
 
     T arr4[] = {T(1), T(2), T(3)};
     Polynomial<T> p7 = makePoly(arr4, 3, type);
@@ -145,7 +145,6 @@ long long testPolynomial(ContainerType type) {
         T big = T(1e6);
         assert(p7.Evaluate(big) == T(1) + T(2) * big + T(3) * big * big);
     }
-    std::cout << "✅ Evaluate\n";
 
     T aP[] = {T(1), T(0), T(1)};
     T aQ[] = {T(1), T(2)};
@@ -161,7 +160,6 @@ long long testPolynomial(ContainerType type) {
     Polynomial<T> compC = P.Compose(C);
     assert(compC.Length() == 1);
     assert(compC[0] == T(10));
-    std::cout << "✅ Compose\n";
 
     T arr5[] = {T(3), T(2), T(1)};
     Polynomial<T> p8 = makePoly(arr5, 3, type);
@@ -174,7 +172,6 @@ long long testPolynomial(ContainerType type) {
     Polynomial<T> derivConst = constPoly.Derivative();
     assert(derivConst.Length() == 1);
     assert(derivConst[0] == T(0));
-    std::cout << "✅ Derivative\n";
 
     T arr6[] = {T(2), T(2)};
     Polynomial<T> p9 = makePoly(arr6, 2, type);
@@ -188,7 +185,6 @@ long long testPolynomial(ContainerType type) {
     assert(integZero.Length() == 2);
     assert(integZero[0] == T(0));
     assert(integZero[1] == T(0));
-    std::cout << "✅ Integral\n";
 
     T arr7[] = {T(1), T(1)};
     Polynomial<T> p10 = makePoly(arr7, 2, type);
@@ -204,7 +200,6 @@ long long testPolynomial(ContainerType type) {
 
     assert(zero.Pow(5) == zero);
     assert(throwsException<PolynomialException>([&]() { p10.Pow(-1); }));
-    std::cout << "✅ Pow\n";
 
     T arr8[] = {T(1), T(2), T(3)};
     Polynomial<T> p11 = makePoly(arr8, 3, type);
@@ -218,14 +213,12 @@ long long testPolynomial(ContainerType type) {
 
     assert(p11.Shift(0) == p11);
     assert(throwsException<PolynomialException>([&]() { p11.Shift(-1); }));
-    std::cout << "✅ Shift\n";
 
     Polynomial<T> shifted2 = p11.Shift(2);
     assert(shifted2.ReduceFront() == p11);
     assert(throwsException<PolynomialException>([&]() { p11.ReduceFront(5); }));
     assert(p11.ReduceFront(0) == p11);
     assert(throwsException<PolynomialException>([&]() { zero.ReduceFront(3); }));
-    std::cout << "✅ ReduceFront\n";
 
     T aA[] = {T(-1), T(0), T(1)};
     T aB[] = {T(-1), T(1)};
@@ -237,7 +230,6 @@ long long testPolynomial(ContainerType type) {
     assert(Qdiv[1] == T(1));
     assert(Rdiv.Length() == 1);
     assert(Rdiv[0] == T(0));
-    std::cout << "✅ Divide\n";
 
     assert(A.GCD(B) == B);
     assert(A.GCD(zero) == A);
@@ -249,7 +241,6 @@ long long testPolynomial(ContainerType type) {
     assert(g.Length() == 1);
     if constexpr (std::is_same<T, int>::value)
         assert(g[0] == 2);
-    std::cout << "✅ GCD\n";
 
     T arr9[] = {T(1), T(2), T(3)};
     Polynomial<T> p12 = makePoly(arr9, 3, type);
@@ -267,7 +258,6 @@ long long testPolynomial(ContainerType type) {
     assert(throwsException<PolynomialException>([&]() { cp[100]; }));
     assert(throwsException<PolynomialException>([&]() { p12.SetCoefficient(T(0), -1); }));
     assert(throwsException<PolynomialException>([&]() { p12.SetCoefficient(T(0), 100); }));
-    std::cout << "✅ Доступ и сравнение\n";
 
     Sequence<T> *seq = createEmptySequence<T>(type);
     seq->append(T(1));
@@ -283,11 +273,11 @@ long long testPolynomial(ContainerType type) {
     Polynomial<T> p14 = makePoly(arr10, 2, type);
     assert((p14 - p14).Length() == 1);
     assert((p14 - p14)[0] == T(0));
-    std::cout << "✅ Нормализация\n";
 
     assert(throwsException<PolynomialException>([&]() { Polynomial<T> pNull(nullptr); }));
     assert(throwsException<PolynomialException>([&]() { zero.Divide(zero); }));
-    std::cout << "✅ Исключения\n";
+
+    std::cout << "✅ TESTS FOR Polynomial<" << typeid(T).name() << "> ON " << container << "\n";
 
     auto totalEnd = high_resolution_clock::now();
     auto totalTime = duration_cast<milliseconds>(totalEnd - totalStart).count();
@@ -343,12 +333,12 @@ void testMatrixForTypeAndContainer(ContainerType rowType, ContainerType colType,
 }
 
 void runMatrixTests() {
-    std::cout << "====== Matrix Polynomial Tests ======\n";
+    std::cout << "======== Matrix Polynomial Tests ========\n";
     testMatrixForTypeAndContainer<int>(ARRAY, ARRAY, "int", "Array");
     testMatrixForTypeAndContainer<int>(LIST, LIST, "int", "List");
     testMatrixForTypeAndContainer<double>(ARRAY, ARRAY, "double", "Array");
     testMatrixForTypeAndContainer<double>(LIST, LIST, "double", "List");
-    std::cout << "==========================================\n";
+    std::cout << "=========================================\n";
 }
 
 void runAllTests() {
@@ -377,5 +367,5 @@ void runAllTests() {
             std::cout << "Equal";
         std::cout << "\n";
     }
-    std::cout << "==========================================\n";
+    std::cout << "===========================================================================\n";
 }

@@ -1,7 +1,11 @@
-#ifndef POLYNOMIALCORE_H
-#define POLYNOMIALCORE_H
-
+#include "Exceptions.h"
 #include "Polynomial.h"
+#include "Matrix.h"
+
+#include "../LAB_2/ArraySequence.h"
+#include "../LAB_2/ListSequence.h"
+
+#include <complex>
 
 
 template <class T>
@@ -45,6 +49,7 @@ template <class T>
 Polynomial<T>::~Polynomial() {
     delete coefficients;
 }
+
 
 template <class T>
 const T Polynomial<T>::operator[](int index) const {
@@ -240,6 +245,7 @@ bool Polynomial<T>::operator!=(const Polynomial<T> &other) const {
     return !(*this == other);
 }
 
+
 template <class T>
 int Polynomial<T>::Length() const {
     return coefficients->getLength();
@@ -296,4 +302,8 @@ const Sequence<T> *Polynomial<T>::GetCoefficients() const {
 }
 
 
-#endif
+template class Polynomial<int>;
+template class Polynomial<double>;
+template class Polynomial<std::complex<double>>;
+template class Polynomial<Matrix<int>>;
+template class Polynomial<Matrix<double>>;

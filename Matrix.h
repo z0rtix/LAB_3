@@ -10,167 +10,54 @@
 
 enum ContainerType { ARRAY, LIST };
 
+
 template <typename T>
 class Matrix {
-    private:
-        Sequence<Sequence<T>*> *data;
-        int size;
+private:
+    Sequence<Sequence<T>*> *data;
+    int size;
 
-        void copyFrom(const Matrix<T> &other) {
-            size = other.size;
-            data = new MutableArraySequence<Sequence<T>*>();
+    void copyFrom(const Matrix<T> &other);   // без тела
 
-            for (int i = 0; i < size; i++) {
-                const Sequence<T> *srcRow = other.data->get(i);
-                MutableArraySequence<T> *newRow = new MutableArraySequence<T>();
+public:
+    Matrix();
+    Matrix(const T &val);
+    Matrix(int n, ContainerType rowType, ContainerType colType);
+    Matrix(const Matrix<T> &other);
+    Matrix(Matrix<T> &&other) noexcept;
+    ~Matrix();
 
-                for (int j = 0; j < size; j++) {
-                    newRow->append(srcRow->get(j));
-                }
+    Matrix<T> &operator=(const Matrix<T> &other);
+    Matrix<T> &operator=(Matrix<T> &&other) noexcept;
 
-                data->append(newRow);
-            }
-        }
+    int getSize() const;
+    T get(int i, int j) const;
+    void set(int i, int j, const T &val);
 
-    public:
-        Matrix() : size(1) {
-            data = new MutableArraySequence<Sequence<T>*>();
-            MutableArraySequence<T> *row = new MutableArraySequence<T>();
-            row->append(T(0));
-            data->append(row);
-        }
+    Matrix<T> operator+(const Matrix<T> &other) const;
+    Matrix<T> operator-(const Matrix<T> &other) const;
+    Matrix<T> operator*(const Matrix<T> &other) const;
+    Matrix<T> operator*(const T &scalar) const;
+    Matrix<T> operator-() const;
 
-        Matrix(const T &val) : size(1) {
-            data = new MutableArraySequence<Sequence<T>*>();
-            MutableArraySequence<T> *row = new MutableArraySequence<T>();
-            row->append(val);
-            data->append(row);
-        }
-
-        Matrix(int n, ContainerType rowType, ContainerType colType) : size(n) {
-            if (rowType == ARRAY) {
-                data = new MutableArraySequence<Sequence<T>*>();
-            } else {
-                data = new MutableListSequence<Sequence<T>*>();
-            }
-
-            for (int i = 0; i < n; i++) {
-                Sequence<T> *row = (colType == ARRAY) ? static_cast<Sequence<T>*>(new MutableArraySequence<T>()) : static_cast<Sequence<T>*>(new MutableListSequence<T>());
-
-                for (int j = 0; j < n; j++)
-                    row->append(T(0));
-                
-                data->append(row);
-            }
-        }
-
-        Matrix(const Matrix<T> &other) {
-            copyFrom(other);
-        }
-
-        Matrix(Matrix<T> &&other) noexcept : data(other.data), size(other.size) {
-            other.data = nullptr;
-            other.size = 0;
-        }
-
-        ~Matrix() {
-            for (int i = 0; i < size; i++) {
-                delete data->get(i);
-            }
-
-            delete data;
-        }
-
-        Matrix<T> &operator=(const Matrix<T> &other) {
-            if (this != &other) {
-                for (int i = 0; i < size; i++) {
-                    delete data->get(i);
-                }
-
-                delete data;
-                copyFrom(other);
-            }
-
-            return *this;
-        }
-    
-        Matrix<T> &operator=(Matrix<T> &&other) noexcept {
-            if (this != &other) {
-                for (int i = 0; i < size; i++) {
-                    delete data->get(i);
-                }
-
-                delete data;
-                data = other.data;
-                size = other.size;
-                other.data = nullptr;
-                other.size = 0;
-            }
-
-            return *this;
-        }
-
-        int getSize() const {
-            return size;
-        }
-
-        T get(int i, int j) const {
-            if (i < 0 || i >= size || j < 0 || j >= size) {
-                throw IndexOutOfRange();
-            }
-
-            return data->get(i)->get(j);
-        }
-
-        void set(int i, int j, const T &val) {
-            if (i < 0 || i >= size || j < 0 || j >= size) {
-                throw IndexOutOfRange();
-            }
-
-            data->get(i)->set(val, j);
-        }
-
-        Matrix<T> operator+(const Matrix<T> &other) const {
-            Matrix<T> res(size, ARRAY, ARRAY);
-
-            for (int i = 0; i < size; i++) {
-                for (int j = 0; j < size; j++) {
-                    res.set(i, j, get(i, j) + other.get(i, j));
-                }
-            }
-
-            return res;
-        }
-
-        bool operator==(const Matrix<T> &other) const {
-            if (size != other.size) return false;
-
-            for (int i = 0; i < size; i++) {
-                for (int j = 0; j < size; j++) {
-                    if (get(i, j) != other.get(i, j)) return false;
-                }
-            }
-
-            return true;
-        }
-
-        bool operator!=(const Matrix<T> &other) const {
-            return !(*this == other);
-        }
+    bool operator==(const Matrix<T> &other) const;
+    bool operator!=(const Matrix<T> &other) const;
 };
 
+
 template <typename T>
-std::ostream& operator<<(std::ostream &os, const Matrix<T> &m) {
-    int size = m.getSize();
+Matrix<T> operator*(const T &scalar, const Matrix<T> &m) {
+    return m * scalar;
+}
 
-    for (int i = 0; i < size; i++) {
-        for (int j = 0; j < size; j++) {
+template <typename T>
+std::ostream &operator<<(std::ostream &os, const Matrix<T> &m) {
+    int sz = m.getSize();
+    for (int i = 0; i < sz; ++i) {
+        for (int j = 0; j < sz; ++j)
             os << m.get(i, j) << " ";
-        }
-
-        if (i < size - 1) os << "\n";
+        if (i < sz - 1) os << "\n";
     }
-    
     return os;
 }
 

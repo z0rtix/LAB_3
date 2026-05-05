@@ -1,7 +1,11 @@
-#ifndef POLYNOMIALOPERATIONS_H
-#define POLYNOMIALOPERATIONS_H
-
+#include "Exceptions.h"
 #include "Polynomial.h"
+#include "Matrix.h"
+
+#include "../LAB_2/ArraySequence.h"
+#include "../LAB_2/ListSequence.h"
+
+#include <complex>
 
 
 template <class T>
@@ -121,13 +125,15 @@ Polynomial<T> Polynomial<T>::GCD(const Polynomial<T> &other) const {
     Polynomial<T> polynomial1(*this), polynomial2(other);
     
     while (polynomial2.Degree() != 0 || polynomial2.GetCoefficient(0) != T(0)) {
-        auto [_, remainder] = polynomial1.Divide(polynomial2);
+        std::pair<Polynomial<T>, Polynomial<T>> divResult = polynomial1.Divide(polynomial2);
         polynomial1 = polynomial2;
-        polynomial2 = remainder;
+        polynomial2 = divResult.second;
     }
 
     return polynomial1;
 }
 
 
-#endif
+template class Polynomial<int>;
+template class Polynomial<double>;
+template class Polynomial<std::complex<double>>;

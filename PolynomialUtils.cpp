@@ -1,7 +1,10 @@
-#ifndef POLYNOMIALUTILS_H
-#define POLYNOMIALUTILS_H
-
+#include "Exceptions.h"
 #include "Polynomial.h"
+
+#include "../LAB_2/ArraySequence.h"
+#include "../LAB_2/ListSequence.h"
+
+#include <iostream>
 
 
 template <class T>
@@ -75,4 +78,8 @@ void Polynomial<T>::print() const {
 }
 
 
-#endif
+template std::ostream& operator<<(std::ostream&, const Polynomial<int>&);
+template std::ostream& operator<<(std::ostream&, const Polynomial<double>&);
+
+template void Polynomial<int>::print() const;
+template void Polynomial<double>::print() const;
