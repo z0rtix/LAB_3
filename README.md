@@ -23,7 +23,7 @@
 ## Требования и сборка
 
 **Компилятор:** C++17 (g++ или clang++)  
-**Зависимости:** стандартная библиотека C++, заголовки из ЛР2 (`../LAB_2/Sequence.h`, `ArraySequence.h`, `ListSequence.h`, `IEnumerator.h`, `IndexOutOfRange.h`)
+**Зависимости:** стандартная библиотека C++, заголовки из ЛР2[url="https://github.com/z0rtix/LAB_2"] (`../LAB_2/Sequence.h`, `ArraySequence.h`, `ListSequence.h`, `IEnumerator.h`, `IndexOutOfRange.h`)
 
 **Сборка:**
 ```bash
