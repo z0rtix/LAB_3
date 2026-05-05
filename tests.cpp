@@ -1,6 +1,7 @@
 #include "Matrix.h"
 #include "Exceptions.h"
 #include "Polynomial.h"
+
 #include "../LAB_2/ArraySequence.h"
 #include "../LAB_2/ListSequence.h"
 
