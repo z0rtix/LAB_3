@@ -13,35 +13,35 @@ enum ContainerType { ARRAY, LIST };
 
 template <typename T>
 class Matrix {
-private:
-    Sequence<Sequence<T>*> *data;
-    int size;
+    private:
+        Sequence<Sequence<T>*> *data;
+        int size;
 
-    void copyFrom(const Matrix<T> &other);   // без тела
+        void copyFrom(const Matrix<T> &other);
 
-public:
-    Matrix();
-    Matrix(const T &val);
-    Matrix(int n, ContainerType rowType, ContainerType colType);
-    Matrix(const Matrix<T> &other);
-    Matrix(Matrix<T> &&other) noexcept;
-    ~Matrix();
+    public:
+        Matrix();
+        Matrix(const T &val);
+        Matrix(int n, ContainerType rowType, ContainerType colType);
+        Matrix(const Matrix<T> &other);
+        Matrix(Matrix<T> &&other) noexcept;
+        ~Matrix();
 
-    Matrix<T> &operator=(const Matrix<T> &other);
-    Matrix<T> &operator=(Matrix<T> &&other) noexcept;
+        Matrix<T> &operator=(const Matrix<T> &other);
+        Matrix<T> &operator=(Matrix<T> &&other) noexcept;
 
-    int getSize() const;
-    T get(int i, int j) const;
-    void set(int i, int j, const T &val);
+        int getSize() const;
+        T get(int i, int j) const;
+        void set(int i, int j, const T &val);
 
-    Matrix<T> operator+(const Matrix<T> &other) const;
-    Matrix<T> operator-(const Matrix<T> &other) const;
-    Matrix<T> operator*(const Matrix<T> &other) const;
-    Matrix<T> operator*(const T &scalar) const;
-    Matrix<T> operator-() const;
+        Matrix<T> operator+(const Matrix<T> &other) const;
+        Matrix<T> operator-(const Matrix<T> &other) const;
+        Matrix<T> operator*(const Matrix<T> &other) const;
+        Matrix<T> operator*(const T &scalar) const;
+        Matrix<T> operator-() const;
 
-    bool operator==(const Matrix<T> &other) const;
-    bool operator!=(const Matrix<T> &other) const;
+        bool operator==(const Matrix<T> &other) const;
+        bool operator!=(const Matrix<T> &other) const;
 };
 
 

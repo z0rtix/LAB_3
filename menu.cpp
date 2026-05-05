@@ -18,6 +18,7 @@ enum DataType { INT, DOUBLE };
 
 enum ContainerType { ARRAY, LIST };
 
+
 template <typename T>
 T inputNumber(const std::string &prompt) {
     T val;
@@ -211,33 +212,36 @@ class PolynomialMenu {
             int op = inputNumber<int>("> ");
 
             Polynomial<T> result;
-            if (op == 4) {
-                T scalar = inputNumber<T>("Скаляр: ");
-                benchmark("Умножение на скаляр", [&]() {
-                    result = current() * scalar;
-                });
-            } else {
-                size_t idx = inputNumber<size_t>("Индекс второго многочлена: ");
-
-                if (idx >= polynomials.size()) {
-                    std::cout << "Неверный индекс.\n";
-                    return;
-                }
-
-                const Polynomial<T> &other = polynomials[idx];
-                if (op == 1) {
-                    benchmark("Сложение", [&]() { result = current() + other; });
-                } else if (op == 2) {
-                    benchmark("Вычитание", [&]() { result = current() - other; });
-                } else if (op == 3) {
-                    benchmark("Умножение", [&]() { result = current() * other; });
+            try {
+                if (op == 4) {
+                    T scalar = inputNumber<T>("Скаляр: ");
+                    benchmark("Умножение на скаляр", [&]() {
+                        result = current() * scalar;
+                    });
                 } else {
-                    return;
+                    size_t idx = inputNumber<size_t>("Индекс второго многочлена: ");
+                    if (idx >= polynomials.size()) {
+                        std::cout << "Неверный индекс.\n";
+                        return;
+                    }
+                    const Polynomial<T> &other = polynomials[idx];
+                    if (op == 1) {
+                        benchmark("Сложение", [&]() { result = current() + other; });
+                    } else if (op == 2) {
+                        benchmark("Вычитание", [&]() { result = current() - other; });
+                    } else if (op == 3) {
+                        benchmark("Умножение", [&]() { result = current() * other; });
+                    } else {
+                        return;
+                    }
                 }
+                std::cout << "Результат: " << result << "\n";
+                if (askReplace()) current() = result;
+            } catch (const PolynomialException &e) {
+                std::cout << "Ошибка: " << e.what() << "\n";
+            } catch (const std::exception &e) {
+                std::cout << "Ошибка: " << e.what() << "\n";
             }
-
-            std::cout << "Результат: " << result << "\n";
-            if (askReplace()) current() = result;
         }
 
         void evaluate() {
@@ -255,40 +259,42 @@ class PolynomialMenu {
         void compose() {
             if (!ensureNotEmpty()) return;
             size_t idx = inputNumber<size_t>("Индекс многочлена Q: ");
-
             if (idx >= polynomials.size()) {
                 std::cout << "Неверный индекс.\n";
                 return;
             }
-
-            Polynomial<T> result;
-            benchmark("Compose", [&]() { result = current().Compose(polynomials[idx]); });
-            std::cout << "P(Q) = " << result << "\n";
-            if (askReplace()) current() = result;
+            try {
+                Polynomial<T> result;
+                benchmark("Compose", [&]() { result = current().Compose(polynomials[idx]); });
+                std::cout << "P(Q) = " << result << "\n";
+                if (askReplace()) current() = result;
+            } catch (const PolynomialException &e) {
+                std::cout << "Ошибка: " << e.what() << "\n";
+            }
         }
 
         void derivative() {
             if (!ensureNotEmpty()) return;
-            Polynomial<T> result;
-
-            benchmark("Derivative", [&]() {
-                result = current().Derivative();
-            });
-
-            std::cout << "P' = " << result << "\n";
-            if (askReplace()) current() = result;
+            try {
+                Polynomial<T> result;
+                benchmark("Derivative", [&]() { result = current().Derivative(); });
+                std::cout << "P' = " << result << "\n";
+                if (askReplace()) current() = result;
+            } catch (const PolynomialException &e) {
+                std::cout << "Ошибка: " << e.what() << "\n";
+            }
         }
 
         void integral() {
             if (!ensureNotEmpty()) return;
-            Polynomial<T> result;
-
-            benchmark("Integral", [&]() {
-                result = current().Integral();
-            });
-
-            std::cout << "∫P dx = " << result << " + C\n";
-            if (askReplace()) current() = result;
+            try {
+                Polynomial<T> result;
+                benchmark("Integral", [&]() { result = current().Integral(); });
+                std::cout << "∫P dx = " << result << " + C\n";
+                if (askReplace()) current() = result;
+            } catch (const PolynomialException &e) {
+                std::cout << "Ошибка: " << e.what() << "\n";
+            }
         }
         
         void power() {
@@ -298,14 +304,14 @@ class PolynomialMenu {
                 std::cout << "Степень должна быть >= 0\n";
                 return;
             }
-
-            Polynomial<T> result;
-            benchmark("Pow", [&]() {
-                result = current().Pow(n);
-            });
-
-            std::cout << "P^" << n << " = " << result << "\n";
-            if (askReplace()) current() = result;
+            try {
+                Polynomial<T> result;
+                benchmark("Pow", [&]() { result = current().Pow(n); });
+                std::cout << "P^" << n << " = " << result << "\n";
+                if (askReplace()) current() = result;
+            } catch (const PolynomialException &e) {
+                std::cout << "Ошибка: " << e.what() << "\n";
+            }
         }
 
         void shift() {
@@ -315,28 +321,28 @@ class PolynomialMenu {
                 std::cout << "Сдвиг должен быть >= 0\n";
                 return;
             }
-
-            Polynomial<T> result;
-            benchmark("Shift", [&]() {
-                result = current().Shift(k);
-            });
-
-            std::cout << "P * x^" << k << " = " << result << "\n";
-            if (askReplace()) current() = result;
+            try {
+                Polynomial<T> result;
+                benchmark("Shift", [&]() { result = current().Shift(k); });
+                std::cout << "P * x^" << k << " = " << result << "\n";
+                if (askReplace()) current() = result;
+            } catch (const PolynomialException &e) {
+                std::cout << "Ошибка: " << e.what() << "\n";
+            }
         }
 
         void reduceFront() {
             if (!ensureNotEmpty()) return;
             int n = inputNumber<int>("Удалить ведущих нулей (0 - без ограничений): ");
             if (n == 0) n = -1;
-
-            Polynomial<T> result;
-            benchmark("ReduceFront", [&]() {
-                result = current().ReduceFront(n);
-            });
-            
-            std::cout << "После сокращения: " << result << "\n";
-            if (askReplace()) current() = result;
+            try {
+                Polynomial<T> result;
+                benchmark("ReduceFront", [&]() { result = current().ReduceFront(n); });
+                std::cout << "После сокращения: " << result << "\n";
+                if (askReplace()) current() = result;
+            } catch (const PolynomialException &e) {
+                std::cout << "Ошибка: " << e.what() << "\n";
+            }
         }
 
         void divide() {
@@ -346,11 +352,14 @@ class PolynomialMenu {
                 std::cout << "Неверный индекс.\n";
                 return;
             }
-
-            auto result = current().Divide(polynomials[idx]);
-            std::cout << "Частное: " << result.first << "\n";
-            std::cout << "Остаток: " << result.second << "\n";
-            if (askReplace()) current() = result.first;
+            try {
+                auto result = current().Divide(polynomials[idx]);
+                std::cout << "Частное: " << result.first << "\n";
+                std::cout << "Остаток: " << result.second << "\n";
+                if (askReplace()) current() = result.first;
+            } catch (const PolynomialException &e) {
+                std::cout << "Ошибка: " << e.what() << "\n";
+            }
         }
 
         void gcd() {
@@ -360,10 +369,13 @@ class PolynomialMenu {
                 std::cout << "Неверный индекс.\n";
                 return;
             }
-
-            Polynomial<T> result = current().GCD(polynomials[idx]);
-            std::cout << "НОД = " << result << "\n";
-            if (askReplace()) current() = result;
+            try {
+                Polynomial<T> result = current().GCD(polynomials[idx]);
+                std::cout << "НОД = " << result << "\n";
+                if (askReplace()) current() = result;
+            } catch (const PolynomialException &e) {
+                std::cout << "Ошибка: " << e.what() << "\n";
+            }
         }
 
         void compare() {
