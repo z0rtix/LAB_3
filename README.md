@@ -23,7 +23,7 @@
 ## Требования и сборка
 
 **Компилятор:** C++17 (g++ или clang++)  
-**Зависимости:** стандартная библиотека C++, заголовки из ЛР2[url="https://github.com/z0rtix/LAB_2"] (`../LAB_2/Sequence.h`, `ArraySequence.h`, `ListSequence.h`, `IEnumerator.h`, `IndexOutOfRange.h`)
+**Зависимости:** стандартная библиотека C++, заголовки [ЛР2](https://github.com/z0rtix/LAB_2) (`../LAB_2/Sequence.h`, `ArraySequence.h`, `ListSequence.h`, `IEnumerator.h`, `IndexOutOfRange.h`)
 
 **Сборка:**
 ```bash
@@ -181,3 +181,8 @@ complex<double>         1257        1956        Array is 1.55609x faster
 - Для изменения параметров тестов (количество итераций стресс‑теста, степень в performance‑сравнении) редактируйте `tests.cpp` или `menu.cpp`.
 - Все предупреждения компилятора устранены.
 - Утечки памяти отсутствуют (проверено `-fsanitize=address` и Valgrind).
+
+
+## Ссылки
+
+    - [ЛР2](https://github.com/z0rtix/LAB_2) - https://github.com/z0rtix/LAB_2
