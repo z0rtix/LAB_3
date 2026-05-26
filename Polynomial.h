@@ -3,8 +3,6 @@
 
 #include "../LAB_2/Sequence.h"
 
-#include <utility>
-
 
 template <class T>
 class Polynomial {
@@ -58,8 +56,13 @@ class Polynomial {
         Polynomial<T> ReduceFront(int exponent = -1) const;
 
         const Sequence<T> *GetCoefficients() const;
-        
-        std::pair<Polynomial<T>, Polynomial<T>> Divide(const Polynomial<T> &other) const;
+
+        struct DivisionResult {
+            Polynomial<T> quotient;
+            Polynomial<T> remainder;
+        };
+            
+        DivisionResult Divide(const Polynomial<T> &other) const;
         Polynomial<T> GCD(const Polynomial<T> &other) const;
 };
 

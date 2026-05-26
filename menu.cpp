@@ -354,9 +354,9 @@ class PolynomialMenu {
             }
             try {
                 auto result = current().Divide(polynomials[idx]);
-                std::cout << "Частное: " << result.first << "\n";
-                std::cout << "Остаток: " << result.second << "\n";
-                if (askReplace()) current() = result.first;
+                std::cout << "Частное: " << result.quotient << "\n";
+                std::cout << "Остаток: " << result.remainder << "\n";
+                if (askReplace()) current() = result.quotient;
             } catch (const PolynomialException &e) {
                 std::cout << "Ошибка: " << e.what() << "\n";
             }

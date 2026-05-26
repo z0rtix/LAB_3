@@ -92,7 +92,7 @@ Polynomial<T> Polynomial<T>::ReduceFront(int exponent) const {
 }
 
 template <class T>
-std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::Divide(const Polynomial<T> &other) const {
+typename Polynomial<T>::DivisionResult Polynomial<T>::Divide(const Polynomial<T> &other) const {
     if (other.Degree() == 0 && other.GetCoefficient(0) == T(0)) {
         throw PolynomialException("Division by zero polynomial");
     }
@@ -117,7 +117,7 @@ std::pair<Polynomial<T>, Polynomial<T>> Polynomial<T>::Divide(const Polynomial<T
         index--;
     }
 
-    return {quotient, remainder};
+    return DivisionResult{quotient, remainder};
 }
 
 template <class T>
@@ -125,9 +125,9 @@ Polynomial<T> Polynomial<T>::GCD(const Polynomial<T> &other) const {
     Polynomial<T> polynomial1(*this), polynomial2(other);
     
     while (polynomial2.Degree() != 0 || polynomial2.GetCoefficient(0) != T(0)) {
-        std::pair<Polynomial<T>, Polynomial<T>> divResult = polynomial1.Divide(polynomial2);
+        DivisionResult divRes = polynomial1.Divide(polynomial2);
         polynomial1 = polynomial2;
-        polynomial2 = divResult.second;
+        polynomial2 = divRes.remainder;
     }
 
     return polynomial1;
