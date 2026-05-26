@@ -5,8 +5,6 @@
 #include "../LAB_2/ArraySequence.h"
 #include "../LAB_2/ListSequence.h"
 
-#include <iostream>
-
 
 enum ContainerType { ARRAY, LIST };
 
@@ -48,17 +46,6 @@ class Matrix {
 template <typename T>
 Matrix<T> operator*(const T &scalar, const Matrix<T> &m) {
     return m * scalar;
-}
-
-template <typename T>
-std::ostream &operator<<(std::ostream &os, const Matrix<T> &m) {
-    int sz = m.getSize();
-    for (int i = 0; i < sz; ++i) {
-        for (int j = 0; j < sz; ++j)
-            os << m.get(i, j) << " ";
-        if (i < sz - 1) os << "\n";
-    }
-    return os;
 }
 
 
