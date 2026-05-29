@@ -16,8 +16,6 @@
 
 enum DataType { INT, DOUBLE };
 
-enum ContainerType { ARRAY, LIST };
-
 
 template <typename T>
 T inputNumber(const std::string &prompt) {

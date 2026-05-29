@@ -5,6 +5,7 @@
 #include "../LAB_2/ArraySequence.h"
 #include "../LAB_2/ListSequence.h"
 
+#include <iostream>
 #include <cassert>
 #include <chrono>
 #include <complex>
