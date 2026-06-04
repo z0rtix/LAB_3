@@ -1,10 +1,3 @@
-#include "menu.h"
-#include "Exceptions.h"
-#include "Polynomial.h"
-
-#include "../LAB_2/ArraySequence.h"
-#include "../LAB_2/ListSequence.h"
-
 #include <iostream>
 #include <vector>
 #include <string>
@@ -13,8 +6,17 @@
 #include <functional>
 #include <chrono>
 
+#include "menu.h"
+#include "Exceptions.h"
+#include "Polynomial.h"
+
+#include "../LAB_2/ArraySequence.h"
+#include "../LAB_2/ListSequence.h"
+
 
 enum DataType { INT, DOUBLE };
+
+enum ContainerType { ARRAY, LIST };
 
 
 template <typename T>

@@ -7,8 +7,11 @@
 
 #include "Exceptions.h"
 
+#include <iosfwd>
+
 
 enum ContainerType { ARRAY, LIST };
+
 
 template <typename T>
 class Matrix {
@@ -244,11 +247,28 @@ bool Matrix<T>::operator!=(const Matrix<T> &other) const {
 }
 
 
-template <class T>
-class Matrix;
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const Matrix<T>& m) {
+    int sz = m.getSize();
+    for (int i = 0; i < sz; i++) {
+        for (int j = 0; j < sz; j++)
+            os << m.get(i, j) << " ";
+        if (i < sz - 1) os << "\n";
+    }
+    return os;
+}
 
-template <class T>
-std::ostream& operator<<(std::ostream&, const Matrix<T>&);
+template <typename T>
+void Matrix<T>::print() const {
+    int sz = getSize();
+    for (int i = 0; i < sz; i++) {
+        for (int j = 0; j < sz; j++)
+            std::cout << get(i, j) << " ";
+        if (i < sz - 1)
+            std::cout << "\n";
+    }
+    std::cout << std::endl;
+}
 
 
 #endif

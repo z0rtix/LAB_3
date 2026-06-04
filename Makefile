@@ -3,7 +3,7 @@ CXXFLAGS = -std=c++17 -Wall -Wextra -g -I. -I../lab2
 ASAN_FLAGS = -fsanitize=address
 LDFLAGS = 
 
-SRCS = main.cpp tests.cpp menu.cpp Matrix.cpp PolynomialUtils.cpp
+SRCS = main.cpp tests.cpp menu.cpp
 OBJS = $(SRCS:.cpp=.o)
 TARGET = lab3
 
